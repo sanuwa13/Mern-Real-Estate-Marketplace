@@ -20,7 +20,10 @@
   },
   "homepage": "https://github.com/sanuwa13/Mern-Real-Estate-Marketplace#readme",
   "dependencies": {
+    "dotenv": "^17.2.3",
     "express": "^5.2.1",
+    "mongodb": "^7.0.0",
+    "mongoose": "^9.1.1",
     "nodemon": "^3.1.11"
   }
 }
