@@ -7,11 +7,9 @@ export default function Profile() {
   const fileRef = useRef(null);
   const { currentUser } = useSelector((state) => state.user);
   const [file, setFile] = useState(undefined);
-  const [filePercent, setFilePerc] = useState(0); // State variable: filePercent
+  const [filePercent, setFilePerc] = useState(false);
+  const [formData, setFormData] = useState({});
   
-  // FIX HERE: Change filePerc to filePercent
-  console.log(filePercent);  // ← FIXED!
-  console.log(file);
 
   useEffect(() => {
     if(file) {
@@ -25,21 +23,24 @@ export default function Profile() {
     const storageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
-    uploadTask.on('state_changed',
+    uploadTask.on(
+      'state_changed',
       (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        const progress = 
+        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setFilePerc(Math.round(progress)); // This updates filePercent state
       },
       (error) => {
         console.error('Upload error:', error);
       },
       () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          // Handle successful upload
-        });
+        getDownloadURL(uploadTask.snapshot.ref).then
+        ((downloadURL) => 
+          setFormData({...formData, avatar: downloadURL})
+        );
       }
     );
-  }
+  };
 
   return (
     <div className='p-3 max-w-lg mx-auto'>
@@ -47,11 +48,13 @@ export default function Profile() {
       <form className='flex flex-col gap-4'>
         <input onChange={(e)=>setFile(e.target.files[0])}
           type="file" ref={fileRef} hidden accept='image/*'/>
-        <img onClick={()=>fileRef.current.click()}
+        <img 
+        onClick={()=>fileRef.current.click()}
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcPVY5FK0TbQhg_WSDUKRuOEWDHwfvaHFCjA&s"
           alt="profile"
           className='h-24 w-24 rounded-full object-cover self-center cursor-pointer mt-2'
         />
+       
         {/* Show upload progress */}
         {filePercent > 0 && filePercent < 100 && (
           <p className='text-center text-sm'>Uploading: {filePercent}%</p>
