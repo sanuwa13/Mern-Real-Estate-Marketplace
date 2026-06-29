@@ -2,13 +2,22 @@ import { useSelector } from 'react-redux';
 import { useRef, useState, useEffect } from 'react';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { app } from '../firebase';
-import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure, signoutUserFailure, signoutUserStart, signoutUserSuccess } from '../redux/user/userSlice';
+import { 
+  updateUserStart, 
+  updateUserSuccess, 
+  updateUserFailure, 
+  deleteUserStart, 
+  deleteUserSuccess, 
+  deleteUserFailure, 
+  signoutUserFailure, 
+  signoutUserStart, 
+  signoutUserSuccess 
+} from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom'; // 1. Fixed: Capitalized Link
 
 export default function Profile() {
   const fileRef = useRef(null);
-  
-  // 1. Destructured 'loading' and 'error' from your Redux user state
   const { currentUser, loading, error } = useSelector((state) => state.user);
   
   const [file, setFile] = useState(undefined);
@@ -30,7 +39,6 @@ export default function Profile() {
     const storageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
-    // Reset error state on a new upload attempt
     setFileUploadError(false);
 
     uploadTask.on(
@@ -41,7 +49,6 @@ export default function Profile() {
       },
       (error) => {
         console.error('Upload error:', error);
-        // 2. Turn on the file upload error flag if Firebase rejects it
         setFileUploadError(true);
       },
       () => {
@@ -83,13 +90,13 @@ export default function Profile() {
   };
 
   const handleDeleteUser = async () => {
-    try{
+    try {
       dispatch(deleteUserStart());
       const res = await fetch(`/api/user/delete/${currentUser._id}`, {
         method: 'DELETE',
       });
       const data = await res.json();
-      if(data.success === false){
+      if (data.success === false) {
         dispatch(deleteUserFailure(data.message));
         return;
       }
@@ -99,10 +106,9 @@ export default function Profile() {
     }
   };
 
-
   const handleSignOut = async () => {
     try {
-      dispatch (signoutUserStart());
+      dispatch(signoutUserStart());
       const res = await fetch('/api/auth/signout');
       const data = await res.json();
       if (data.success === false) {
@@ -111,7 +117,8 @@ export default function Profile() {
       }
       dispatch(signoutUserSuccess(data));
     } catch (error) {
-      dispatch(signoutUserFailure(data.message));
+      // 2. Fixed: Changed data.message to error.message
+      dispatch(signoutUserFailure(error.message));
     }
   };
 
@@ -134,7 +141,6 @@ export default function Profile() {
           className='h-24 w-24 rounded-full object-cover self-center cursor-pointer mt-2'
         />
        
-        {/* Streamlined Upload Progress and Error Messaging */}
         <div className='text-center text-sm'>
           {fileUploadError ? (
             <span className='text-red-700'>Error Image upload (Image must be less than 2MB)</span>
@@ -171,13 +177,20 @@ export default function Profile() {
           onChange={handleChange}
         />
         
-        {/* 3. Button changes text and disables itself while loading */}
         <button 
           disabled={loading} 
           className='bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80'
         >
           {loading ? 'Loading...' : 'Update'}
         </button>
+
+        {/* 3. Fixed: Changed to capitalized Link and className */}
+        <Link 
+          className='bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95'  
+          to={'/create-listing'}
+        >
+          Create Listing
+        </Link>
       </form>
       
       <div className='flex justify-between mt-5'>
@@ -185,7 +198,6 @@ export default function Profile() {
         <span onClick={handleSignOut} className='text-red-700 cursor-pointer'>Sign Out</span>
       </div>
 
-      {/* These will now read properly without breaking your app */}
       <p className='text-red-700 mt-5'>{error ? error : ''}</p>
       <p className='text-green-700 mt-5'>{updateSuccess ? 'Profile updated successfully!' : ''}</p>
     </div>
