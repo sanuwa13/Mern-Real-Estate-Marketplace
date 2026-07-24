@@ -45,7 +45,8 @@ const listingSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
     },
-    imagesUrls: {
+    // FIXED: Changed imagesUrls to imageUrls (no extra 's')
+    imageUrls: {
         type: [String],
         required: true,
     },
@@ -53,8 +54,7 @@ const listingSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-}, { timestamps: true }
-)
+}, { timestamps: true });
 
 const Listing = mongoose.model('Listing', listingSchema);
 

@@ -153,7 +153,7 @@ export default function Profile() {
       });
       const data = await res.json();
       if (data.success === false) {
-        console.log(error.message);
+        console.log(data.message);
         return;
       }
       setUserListings((prevListings) =>
@@ -279,10 +279,15 @@ export default function Profile() {
               className="border p-3 rounded-lg flex items-center justify-between gap-4"
             >
               <Link to={`/listing/${listing._id}`}>
+                {/* FIXED: Added fallback check for images array name & placeholder fallback */}
                 <img
-                  src={listing.imageUrls?.[0]}
+                  src={
+                    listing.imageUrls?.[0] ||
+                    listing.images?.[0] ||
+                    "https://53.fs1.hubspotusercontent-na1.net/hub/53/hubfs/Sales_Blog/real-estate-business-compressor.png"
+                  }
                   alt="listing cover"
-                  className="h-16 w-16 object-contain"
+                  className="h-16 w-16 object-cover rounded-lg"
                 />
               </Link>
               <Link
@@ -299,7 +304,12 @@ export default function Profile() {
                 >
                   Delete
                 </button>
-                <button className="text-green-700 uppercase">Edit</button>
+                <Link
+                  to={`/update-listing/${listing._id}`}
+                  className="text-green-700 uppercase"
+                >
+                  Edit
+                </Link>
               </div>
             </div>
           ))}
