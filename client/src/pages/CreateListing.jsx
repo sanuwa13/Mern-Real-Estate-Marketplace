@@ -25,7 +25,7 @@ export default function CreateListing() {
     furnished: false,
     offer: false,
     regularPrice: 500,
-    discountedPrice: 0,
+    discountPrice: 0, // 👈 FIXED: Changed from discountedPrice to discountPrice
   });
   const [imageUploadError, setImageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -35,7 +35,6 @@ export default function CreateListing() {
   console.log(formData);
 
   const handleImageSubmit = (e) => {
-    // ✅ FIXED: Separate check for empty file selection to give clear error message
     if (files.length === 0) {
       setImageUploadError("Please select at least one image to upload first");
       return;
@@ -141,15 +140,14 @@ export default function CreateListing() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Prevent form submission if images haven't been uploaded to cloud
       if (formData.imageUrls.length < 1) {
         return setError(
           "You must upload at least one image before creating a listing",
         );
       }
 
-      // Enforce that discount price cannot exceed regular price if an offer exists
-      if (formData.offer && formData.regularPrice <= formData.discountedPrice) {
+      // 👈 FIXED: Updated variable check
+      if (formData.offer && formData.regularPrice <= formData.discountPrice) {
         return setError(
           "Discounted price must be lower than the regular price",
         );
@@ -173,7 +171,6 @@ export default function CreateListing() {
       if (data.success === false) {
         setError(data.message);
       } else {
-        // ✅ ADDED: Redirects user to the view page of their new listing upon success
         navigate(`/listing/${data._id}`);
       }
     } catch (error) {
@@ -316,25 +313,27 @@ export default function CreateListing() {
               </div>
             </div>
 
-            {/* ✅ Enforce conditional UI/validation or logic helper for Offer */}
-            <div className="flex items-center gap-2">
-              <input
-                type="number"
-                id="discountedPrice"
-                min="0"
-                max="100000000"
-                required
-                className="p-3 border border-gray-300 rounded-lg"
-                onChange={handleChange}
-                value={formData.discountedPrice}
-              />
-              <div className="flex flex-col items-center">
-                <p>Discounted Price</p>
-                {formData.type === "rent" && (
-                  <span className="text-xs">(Rs. / month)</span>
-                )}
+            {/* 👈 FIXED: Show discount price input ONLY when Offer is checked & updated ID */}
+            {formData.offer && (
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  id="discountPrice" // 👈 ID matches schema & Listing.jsx
+                  min="0"
+                  max="100000000"
+                  required
+                  className="p-3 border border-gray-300 rounded-lg"
+                  onChange={handleChange}
+                  value={formData.discountPrice}
+                />
+                <div className="flex flex-col items-center">
+                  <p>Discounted Price</p>
+                  {formData.type === "rent" && (
+                    <span className="text-xs">(Rs. / month)</span>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 

@@ -26,7 +26,7 @@ export default function UpdateListing() {
     furnished: false,
     offer: false,
     regularPrice: 500,
-    discountedPrice: 0,
+    discountPrice: 0,
   });
   const [imageUploadError, setImageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -43,12 +43,13 @@ export default function UpdateListing() {
           setError(data.message);
           return;
         }
-        // ✅ Safe merge: Keeps default empty arrays if missing from response
-        setFormData((prev) => ({
-          ...prev,
+        
+        // 👈 FIX: Map existing DB data safely so old 'discountedPrice' keys convert to 'discountPrice'
+        setFormData({
           ...data,
+          discountPrice: data.discountPrice ?? data.discountedPrice ?? 0,
           imageUrls: data.imageUrls || [],
-        }));
+        });
       } catch (err) {
         setError("Failed to fetch listing data");
       }
@@ -146,13 +147,12 @@ export default function UpdateListing() {
         [e.target.id]: e.target.checked,
       });
     }
-    if (e.target.type === "number") {
-      setFormData({
-        ...formData,
-        [e.target.id]: Number(e.target.value),
-      });
-    }
-    if (e.target.type === "text" || e.target.type === "textarea") {
+    // 👈 FIX: Allow smooth typing for numbers/text without forcing Number("") -> 0 on backspace
+    if (
+      e.target.type === "number" ||
+      e.target.type === "text" ||
+      e.target.type === "textarea"
+    ) {
       setFormData({
         ...formData,
         [e.target.id]: e.target.value,
@@ -169,7 +169,7 @@ export default function UpdateListing() {
         );
       }
 
-      if (formData.offer && formData.regularPrice <= formData.discountedPrice) {
+      if (formData.offer && Number(formData.regularPrice) <= Number(formData.discountPrice)) {
         return setError(
           "Discounted price must be lower than the regular price"
         );
@@ -184,6 +184,8 @@ export default function UpdateListing() {
         },
         body: JSON.stringify({
           ...formData,
+          regularPrice: Number(formData.regularPrice),
+          discountPrice: Number(formData.discountPrice),
           userRef: currentUser?._id,
         }),
       });
@@ -335,24 +337,26 @@ export default function UpdateListing() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <input
-                type="number"
-                id="discountedPrice"
-                min="0"
-                max="100000000"
-                required
-                className="p-3 border border-gray-300 rounded-lg"
-                onChange={handleChange}
-                value={formData.discountedPrice}
-              />
-              <div className="flex flex-col items-center">
-                <p>Discounted Price</p>
-                {formData.type === "rent" && (
-                  <span className="text-xs">(Rs. / month)</span>
-                )}
+            {formData.offer && (
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  id="discountPrice"
+                  min="0"
+                  max="100000000"
+                  required
+                  className="p-3 border border-gray-300 rounded-lg"
+                  onChange={handleChange}
+                  value={formData.discountPrice}
+                />
+                <div className="flex flex-col items-center">
+                  <p>Discounted Price</p>
+                  {formData.type === "rent" && (
+                    <span className="text-xs">(Rs. / month)</span>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
