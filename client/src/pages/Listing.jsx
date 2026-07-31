@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore from "swiper";
 import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
 import { useSelector } from "react-redux";
@@ -12,24 +11,20 @@ import {
   FaBath,
   FaParking,
   FaChair,
-  FaPhone, // 👈 Added phone icon
+  FaPhone,
 } from "react-icons/fa";
 import Contact from "../components/Contact.jsx";
-
-// Initialize Swiper Navigation module
-SwiperCore.use([Navigation]);
 
 export default function Listing() {
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [showPhone, setShowPhone] = useState(false); // 👈 State to toggle phone number view
+  const [contact, setContact] = useState(false);
+  const [showPhone, setShowPhone] = useState(false);
   const params = useParams();
-  
-  // Safely extract currentUser from Redux state
-  const userState = useSelector((state) => state.user);
-  const currentUser = userState?.currentUser || userState;
+
+  const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -54,15 +49,14 @@ export default function Listing() {
     fetchListing();
   }, [params.listingId]);
 
-  // 1. Get prices safely
+  // Safe image extraction (supports both 'imageUrls' and legacy 'imagesUrls')
+  const listingImages = listing?.imageUrls || listing?.imagesUrls || [];
+
+  // Price & savings calculations
   const regularPrice = Number(listing?.regularPrice || 0);
-
-  // 2. Checks BOTH 'discountPrice' and 'discountedPrice' so old/new DB records work
   const discountPrice = Number(
-    listing?.discountPrice ?? listing?.discountedPrice ?? 0,
+    listing?.discountPrice ?? listing?.discountedPrice ?? 0
   );
-
-  // 3. Calculate savings ($1000 - $900 = $100)
   const discountSavings = regularPrice - discountPrice;
 
   return (
@@ -77,18 +71,24 @@ export default function Listing() {
       {listing && !loading && !error && (
         <div>
           {/* Swiper Image Slider */}
-          <Swiper navigation>
-            {listing.imageUrls?.map((url) => (
-              <SwiperSlide key={url}>
-                <div
-                  className="h-[550px]"
-                  style={{
-                    background: `url(${url}) center no-repeat`,
-                    backgroundSize: "cover",
-                  }}
-                ></div>
+          <Swiper modules={[Navigation]} navigation>
+            {listingImages.length > 0 ? (
+              listingImages.map((url, index) => (
+                <SwiperSlide key={url || index}>
+                  <img
+                    src={url}
+                    alt={listing.name}
+                    className="h-[550px] w-full object-cover"
+                  />
+                </SwiperSlide>
+              ))
+            ) : (
+              <SwiperSlide>
+                <div className="h-[550px] w-full flex items-center justify-center bg-gray-200 text-gray-500">
+                  No images available
+                </div>
               </SwiperSlide>
-            ))}
+            )}
           </Swiper>
 
           {/* Share Button */}
@@ -173,26 +173,40 @@ export default function Listing() {
               </li>
             </ul>
 
-            {/* Contact / Phone Reveal Button */}
+            {/* Contact Landlord & Call Owner Action Buttons */}
             {currentUser && listing.userRef !== currentUser._id && (
-              <div className="mt-3">
-                {!showPhone ? (
+              <div className="flex flex-col gap-3 mt-3">
+                {!contact && (
                   <button
-                    onClick={() => setShowPhone(true)}
-                    className="bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3 w-full font-semibold transition-all"
+                    onClick={() => setContact(true)}
+                    className="bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3 font-semibold"
                   >
-                    Contact Owner
+                    Contact Owner (Email)
                   </button>
-                ) : (
-                  <a
-                    href={`tel:${listing.phone}`}
-                    className="bg-green-700 text-white text-center rounded-lg p-3 w-full font-semibold flex items-center justify-center gap-2 hover:opacity-95 text-lg transition-all"
-                  >
-                    <FaPhone /> Call Owner: {listing.phone || "No phone provided"}
-                  </a>
+                )}
+
+                {listing.phone && (
+                  <div>
+                    {!showPhone ? (
+                      <button
+                        onClick={() => setShowPhone(true)}
+                        className="bg-green-700 text-white rounded-lg uppercase hover:opacity-95 p-3 font-semibold w-full"
+                      >
+                        Show Phone Number
+                      </button>
+                    ) : (
+                      <a
+                        href={`tel:${listing.phone}`}
+                        className="bg-green-800 text-white text-center rounded-lg p-3 font-semibold flex items-center justify-center gap-2 hover:opacity-95 text-lg"
+                      >
+                        <FaPhone /> Call Owner: {listing.phone}
+                      </a>
+                    )}
+                  </div>
                 )}
               </div>
             )}
+            {contact && <Contact listing={listing} />}
           </div>
         </div>
       )}
