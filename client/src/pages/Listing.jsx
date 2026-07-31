@@ -12,8 +12,9 @@ import {
   FaBath,
   FaParking,
   FaChair,
-} from "react-icons/fa"; // 👈 FIXED: Added FaBed and other listing icons
-import Contact from "../components/Contact.jsx"; // 
+  FaPhone, // 👈 Added phone icon
+} from "react-icons/fa";
+import Contact from "../components/Contact.jsx";
 
 // Initialize Swiper Navigation module
 SwiperCore.use([Navigation]);
@@ -23,9 +24,12 @@ export default function Listing() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [showPhone, setShowPhone] = useState(false); // 👈 State to toggle phone number view
   const params = useParams();
-  const currentUser = useSelector((state) => state.user);
-  const [contact, setContact] = useState(false);
+  
+  // Safely extract currentUser from Redux state
+  const userState = useSelector((state) => state.user);
+  const currentUser = userState?.currentUser || userState;
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -168,11 +172,27 @@ export default function Listing() {
                 {listing.furnished ? "Furnished" : "Not Furnished"}
               </li>
             </ul>
-            {currentUser && listing.userRef !== currentUser._id && !contact && (
-              <button onClick={() => setContact(true)}
-               className="bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3">Contact Owner</button>
+
+            {/* Contact / Phone Reveal Button */}
+            {currentUser && listing.userRef !== currentUser._id && (
+              <div className="mt-3">
+                {!showPhone ? (
+                  <button
+                    onClick={() => setShowPhone(true)}
+                    className="bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3 w-full font-semibold transition-all"
+                  >
+                    Contact Owner
+                  </button>
+                ) : (
+                  <a
+                    href={`tel:${listing.phone}`}
+                    className="bg-green-700 text-white text-center rounded-lg p-3 w-full font-semibold flex items-center justify-center gap-2 hover:opacity-95 text-lg transition-all"
+                  >
+                    <FaPhone /> Call Owner: {listing.phone || "No phone provided"}
+                  </a>
+                )}
+              </div>
             )}
-            {contact && <Contact listing={listing} />}
           </div>
         </div>
       )}

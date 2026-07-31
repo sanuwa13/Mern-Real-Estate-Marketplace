@@ -19,6 +19,7 @@ export default function UpdateListing() {
     name: "",
     description: "",
     address: "",
+    phone: "",
     type: "rent",
     bedrooms: 1,
     bathrooms: 1,
@@ -43,10 +44,11 @@ export default function UpdateListing() {
           setError(data.message);
           return;
         }
-        
-        // 👈 FIX: Map existing DB data safely so old 'discountedPrice' keys convert to 'discountPrice'
+
+        // Safely map existing listing data into state
         setFormData({
           ...data,
+          phone: data.phone || "",
           discountPrice: data.discountPrice ?? data.discountedPrice ?? 0,
           imageUrls: data.imageUrls || [],
         });
@@ -83,7 +85,7 @@ export default function UpdateListing() {
           setUploading(false);
           setFiles([]);
         })
-        .catch((err) => {
+        .catch(() => {
           setImageUploadError("Image upload failed (2 MB max per image)");
           setUploading(false);
         });
@@ -147,7 +149,6 @@ export default function UpdateListing() {
         [e.target.id]: e.target.checked,
       });
     }
-    // 👈 FIX: Allow smooth typing for numbers/text without forcing Number("") -> 0 on backspace
     if (
       e.target.type === "number" ||
       e.target.type === "text" ||
@@ -169,7 +170,10 @@ export default function UpdateListing() {
         );
       }
 
-      if (formData.offer && Number(formData.regularPrice) <= Number(formData.discountPrice)) {
+      if (
+        formData.offer &&
+        Number(formData.regularPrice) <= Number(formData.discountPrice)
+      ) {
         return setError(
           "Discounted price must be lower than the regular price"
         );
@@ -185,7 +189,10 @@ export default function UpdateListing() {
         body: JSON.stringify({
           ...formData,
           regularPrice: Number(formData.regularPrice),
-          discountPrice: Number(formData.discountPrice),
+          bedrooms: Number(formData.bedrooms),
+          bathrooms: Number(formData.bathrooms),
+          // Fallback to 0 if offer is false to pass Mongoose schema validation
+          discountPrice: formData.offer ? Number(formData.discountPrice) : 0,
           userRef: currentUser?._id,
         }),
       });
@@ -238,6 +245,15 @@ export default function UpdateListing() {
             required
             onChange={handleChange}
             value={formData.address || ""}
+          />
+          <input
+            type="text"
+            placeholder="Phone Number (e.g., 0771234567)"
+            className="p-3 border rounded-lg"
+            id="phone"
+            required
+            onChange={handleChange}
+            value={formData.phone || ""}
           />
 
           <div className="flex gap-6 flex-wrap">
@@ -333,7 +349,9 @@ export default function UpdateListing() {
               />
               <div className="flex flex-col items-center">
                 <p>Regular Price</p>
-                <span className="text-xs">(Rs. / month)</span>
+                <span className="text-xs">
+                  {formData.type === "rent" ? "(Rs. / month)" : "(Rs.)"}
+                </span>
               </div>
             </div>
 

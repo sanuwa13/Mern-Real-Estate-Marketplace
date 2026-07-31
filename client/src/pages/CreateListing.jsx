@@ -7,17 +7,18 @@ import {
 } from "firebase/storage";
 import { app } from "../firebase";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 
 export default function CreateListing() {
   const { currentUser } = useSelector((state) => state.user);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({
     imageUrls: [],
     name: "",
     description: "",
     address: "",
+    phone: "",
     type: "rent",
     bedrooms: 1,
     bathrooms: 1,
@@ -25,14 +26,12 @@ export default function CreateListing() {
     furnished: false,
     offer: false,
     regularPrice: 500,
-    discountPrice: 0, // 👈 FIXED: Changed from discountedPrice to discountPrice
+    discountPrice: 0,
   });
   const [imageUploadError, setImageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  console.log(formData);
 
   const handleImageSubmit = (e) => {
     if (files.length === 0) {
@@ -59,7 +58,7 @@ export default function CreateListing() {
           setUploading(false);
           setFiles([]);
         })
-        .catch((err) => {
+        .catch(() => {
           setImageUploadError("Image upload failed (2 MB max per image)");
           setUploading(false);
         });
@@ -90,7 +89,7 @@ export default function CreateListing() {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             resolve(downloadURL);
           });
-        },
+        }
       );
     });
   };
@@ -123,13 +122,11 @@ export default function CreateListing() {
         [e.target.id]: e.target.checked,
       });
     }
-    if (e.target.type === "number") {
-      setFormData({
-        ...formData,
-        [e.target.id]: Number(e.target.value),
-      });
-    }
-    if (e.target.type === "text" || e.target.type === "textarea") {
+    if (
+      e.target.type === "number" ||
+      e.target.type === "text" ||
+      e.target.type === "textarea"
+    ) {
       setFormData({
         ...formData,
         [e.target.id]: e.target.value,
@@ -142,14 +139,16 @@ export default function CreateListing() {
     try {
       if (formData.imageUrls.length < 1) {
         return setError(
-          "You must upload at least one image before creating a listing",
+          "You must upload at least one image before creating a listing"
         );
       }
 
-      // 👈 FIXED: Updated variable check
-      if (formData.offer && formData.regularPrice <= formData.discountPrice) {
+      if (
+        formData.offer &&
+        Number(formData.regularPrice) <= Number(formData.discountPrice)
+      ) {
         return setError(
-          "Discounted price must be lower than the regular price",
+          "Discounted price must be lower than the regular price"
         );
       }
 
@@ -162,6 +161,11 @@ export default function CreateListing() {
         },
         body: JSON.stringify({
           ...formData,
+          regularPrice: Number(formData.regularPrice),
+          bedrooms: Number(formData.bedrooms),
+          bathrooms: Number(formData.bathrooms),
+          // Defaults discountPrice to 0 when offer is false to satisfy backend validation
+          discountPrice: formData.offer ? Number(formData.discountPrice) : 0,
           userRef: currentUser?._id,
         }),
       });
@@ -214,6 +218,15 @@ export default function CreateListing() {
             required
             onChange={handleChange}
             value={formData.address}
+          />
+          <input
+            type="text"
+            placeholder="Phone Number (e.g., 0771234567)"
+            className="p-3 border rounded-lg"
+            id="phone"
+            required
+            onChange={handleChange}
+            value={formData.phone}
           />
 
           <div className="flex gap-6 flex-wrap">
@@ -309,16 +322,17 @@ export default function CreateListing() {
               />
               <div className="flex flex-col items-center">
                 <p>Regular Price</p>
-                <span className="text-xs">(Rs. / month)</span>
+                <span className="text-xs">
+                  {formData.type === "rent" ? "(Rs. / month)" : "(Rs.)"}
+                </span>
               </div>
             </div>
 
-            {/* 👈 FIXED: Show discount price input ONLY when Offer is checked & updated ID */}
             {formData.offer && (
               <div className="flex items-center gap-2">
                 <input
                   type="number"
-                  id="discountPrice" // 👈 ID matches schema & Listing.jsx
+                  id="discountPrice"
                   min="0"
                   max="100000000"
                   required
