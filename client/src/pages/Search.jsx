@@ -9,11 +9,13 @@ export default function Search() {
     parking: false,
     furnished: false,
     offer: false,
-    sort: "createdAt", 
+    sort: "createdAt",
     order: "desc",
   });
 
-  // Sync sidebar state with URL query params when page loads or URL changes
+  const [loading, setLoading] = useState(false);
+  const [listings, setListings] = useState([]);
+
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = urlParams.get("searchTerm");
@@ -43,6 +45,17 @@ export default function Search() {
         order: orderFromUrl || "desc",
       });
     }
+
+    const fetchListings = async () => {
+      setLoading(true);
+      const searchQuery = urlParams.toString();
+      const res = await fetch("/api/listing/get?${searchQuery}");
+      const data = await res.json();
+      setListings(data);
+      setLoading(false);
+    };
+
+    fetchListings();
   }, [location.search]);
 
   const handleChange = (e) => {
