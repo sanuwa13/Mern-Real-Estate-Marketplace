@@ -114,7 +114,7 @@ export default function Listing() {
           <div className="flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4">
             {/* Title & Top Price */}
             <p className="text-2xl font-semibold">
-              {listing.name} - ${" "}
+              {listing.name} - Rs.{""}
               {listing.offer
                 ? discountPrice.toLocaleString("en-US")
                 : regularPrice.toLocaleString("en-US")}
@@ -136,7 +136,7 @@ export default function Listing() {
               {/* Green Savings Badge */}
               {listing.offer && (
                 <p className="bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md">
-                  ${discountSavings.toLocaleString("en-US")}
+                  Rs. {discountSavings.toLocaleString("en-US")} OFF
                 </p>
               )}
             </div>
