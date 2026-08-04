@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // 👈 FIXED: Added useLocation
+import ListingItem from "../components/ListingItem"; // 👈 FIXED: Added ListingItem import
 
 export default function Search() {
   const navigate = useNavigate();
+  const location = useLocation(); // 👈 FIXED: Using useLocation hook
   const [sidebardata, setSidebardata] = useState({
     searchTerm: "",
     type: "all",
@@ -49,7 +51,9 @@ export default function Search() {
     const fetchListings = async () => {
       setLoading(true);
       const searchQuery = urlParams.toString();
-      const res = await fetch("/api/listing/get?${searchQuery}");
+      
+      // 👈 FIXED: Changed double quotes to backticks ``
+      const res = await fetch(`/api/listing/get?${searchQuery}`);
       const data = await res.json();
       setListings(data);
       setLoading(false);
@@ -59,7 +63,6 @@ export default function Search() {
   }, [location.search]);
 
   const handleChange = (e) => {
-    // 👈 FIXED: Changed e.target.type to e.target.id
     if (
       e.target.id === "all" ||
       e.target.id === "rent" ||
@@ -78,7 +81,6 @@ export default function Search() {
       });
     }
 
-    // 👈 FIXED: Included 'offer' as a boolean toggle & simplified logic
     if (
       e.target.id === "parking" ||
       e.target.id === "furnished" ||
@@ -165,7 +167,6 @@ export default function Search() {
               <span>Sale</span>
             </div>
             <div className="flex gap-2">
-              {/* 👈 FIXED: Offer uses sidebardata.offer boolean */}
               <input
                 type="checkbox"
                 id="offer"
@@ -203,7 +204,6 @@ export default function Search() {
 
           <div className="flex items-center gap-2">
             <label className="font-semibold">Sort:</label>
-            {/* 👈 FIXED: Made select controlled using state value */}
             <select
               onChange={handleChange}
               value={`${sidebardata.sort}_${sidebardata.order}`}
@@ -227,6 +227,21 @@ export default function Search() {
         <h1 className="text-3xl font-semibold border-b p-3 text-slate-700 mt-5">
           Listing results:
         </h1>
+        <div className="p-7 flex flex-wrap gap-4">
+          {!loading && listings.length === 0 && (
+            <p className="text-slate-700 text-xl">No listings found!</p>
+          )}
+          {loading && (
+            <p className="text-slate-700 text-xl text-center">Loading...</p>
+          )}
+
+          {/* 👈 FIXED: Capitalized ListingItem component call */}
+          {!loading &&
+            listings &&
+            listings.map((listing) => (
+              <ListingItem key={listing._id} listing={listing} />
+            ))}
+        </div>
       </div>
     </div>
   );
