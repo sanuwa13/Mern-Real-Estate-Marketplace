@@ -5,7 +5,7 @@ export default function ListingItem({ listing }) {
   const coverImage =
     listing?.imageUrls?.[0] ||
     listing?.imagesUrls?.[0] ||
-    "https://53.fs1.hubspotusercontent-na1.net/hub/53/hubfs/Sales_Blog/real-estate-business-compressor.png";
+    "https://instandart.com/wp-content/uploads/2025/10/istockphoto-1409298953-612x612-1.jpg";
 
   const price = listing.offer
     ? Number(listing?.discountPrice ?? listing?.discountedPrice ?? 0)
