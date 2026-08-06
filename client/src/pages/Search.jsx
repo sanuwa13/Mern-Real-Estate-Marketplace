@@ -260,7 +260,9 @@ export default function Search() {
             <p className="text-slate-700 text-xl">No listings found!</p>
           )}
           {loading && (
-            <p className="text-slate-700 text-xl text-center w-full">Loading...</p>
+            <p className="text-slate-700 text-xl text-center w-full">
+              Loading...
+            </p>
           )}
 
           {!loading &&
