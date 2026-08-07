@@ -12,7 +12,6 @@ export default function ListingItem({ listing }) {
     : Number(listing?.regularPrice || 0);
 
   return (
-    /* 👈 Updated width to sm:w-[265px] so 4 cards fit side-by-side with gap-4 */
     <div className='bg-white shadow-md hover:shadow-lg transition-shadow overflow-hidden rounded-lg w-full sm:w-[265px]'>
       <Link to={`/listing/${listing._id}`}>
         <img

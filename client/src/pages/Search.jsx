@@ -56,7 +56,6 @@ export default function Search() {
       const res = await fetch(`/api/listing/get?${searchQuery}`);
       const data = await res.json();
 
-      // 👈 FIXED: Cleaned up if/else logic for initial load
       if (data.length > 8) {
         setShowMore(true);
       } else {
@@ -124,7 +123,6 @@ export default function Search() {
     navigate(`/search?${searchQuery}`);
   };
 
-  // 👈 FIXED: Direct async function execution for Show More
   const onShowMoreClick = async () => {
     const numberOfListings = listings.length;
     const startIndex = numberOfListings;

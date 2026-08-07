@@ -279,7 +279,7 @@ export default function Profile() {
               className="border p-3 rounded-lg flex items-center justify-between gap-4"
             >
               <Link to={`/listing/${listing._id}`}>
-                {/* FIXED: Added fallback check for images array name & placeholder fallback */}
+                
                 <img
                   src={
                     listing.imageUrls?.[0] ||

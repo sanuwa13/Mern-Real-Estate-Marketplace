@@ -164,7 +164,6 @@ export default function CreateListing() {
           regularPrice: Number(formData.regularPrice),
           bedrooms: Number(formData.bedrooms),
           bathrooms: Number(formData.bathrooms),
-          // Defaults discountPrice to 0 when offer is false to satisfy backend validation
           discountPrice: formData.offer ? Number(formData.discountPrice) : 0,
           userRef: currentUser?._id,
         }),

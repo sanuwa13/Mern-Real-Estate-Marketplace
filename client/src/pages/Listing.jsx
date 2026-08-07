@@ -49,7 +49,6 @@ export default function Listing() {
     fetchListing();
   }, [params.listingId]);
 
-  // Safe image extraction (supports both 'imageUrls' and legacy 'imagesUrls')
   const listingImages = listing?.imageUrls || listing?.imagesUrls || [];
 
   // Price & savings calculations

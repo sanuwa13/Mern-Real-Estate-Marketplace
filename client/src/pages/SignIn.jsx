@@ -23,10 +23,9 @@ export default function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 1. Client-side validation: Check if email or password are empty strings or undefined
     if (!formData.email || !formData.password || formData.email.trim() === '' || formData.password.trim() === '') {
       dispatch(signInFailure('please enter sign in credentials'));
-      return; // Stop execution here so it never hits "Loading..." or runs the fetch request
+      return; 
     }
 
     try {
@@ -43,7 +42,6 @@ export default function SignIn() {
       console.log(data);
       
       if (data.success === false) {
-        // Fixed typo: changed data.massage to data.message
         dispatch(signInFailure(data.message));
         return;
       }
@@ -87,7 +85,6 @@ export default function SignIn() {
         </Link>
       </div>
       
-      {/* This will cleanly display "please enter sign in credentials" and reset the button */}
       {error && <p className='text-red-600 mt-5'>{error}</p>}
     </div>
   );

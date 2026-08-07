@@ -45,7 +45,6 @@ export default function UpdateListing() {
           return;
         }
 
-        // Safely map existing listing data into state
         setFormData({
           ...data,
           phone: data.phone || "",
@@ -191,7 +190,6 @@ export default function UpdateListing() {
           regularPrice: Number(formData.regularPrice),
           bedrooms: Number(formData.bedrooms),
           bathrooms: Number(formData.bathrooms),
-          // Fallback to 0 if offer is false to pass Mongoose schema validation
           discountPrice: formData.offer ? Number(formData.discountPrice) : 0,
           userRef: currentUser?._id,
         }),

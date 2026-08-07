@@ -13,7 +13,6 @@ export default function Home() {
   useEffect(() => {
     const fetchOfferListings = async () => {
       try {
-        // 👈 FIXED: Endpoint route changed to singular /api/listing/get
         const res = await fetch("/api/listing/get?offer=true&limit=4");
         const data = await res.json();
         setOfferListings(data);
@@ -30,7 +29,6 @@ export default function Home() {
         setRentListings(data);
         fetchSaleListings();
       } catch (error) {
-        // 👈 FIXED: Added missing catch block
         console.log(error);
       }
     };
@@ -41,11 +39,11 @@ export default function Home() {
         const data = await res.json();
         setSaleListings(data);
       } catch (error) {
-        console.log(error); // 👈 FIXED: Changed log(error) to console.log(error)
+        console.log(error); 
       }
     };
 
-    fetchOfferListings(); // 👈 FIXED: Invoked initial fetch call
+    fetchOfferListings(); 
   }, []);
 
   return (
