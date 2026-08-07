@@ -15,7 +15,6 @@ export const signup = async (req, res, next) => {
       message: 'User registered successfully',
     });
   } catch (error) {
-    // 🔑 Handle duplicate key error
     if (error.code === 11000) {
       return res.status(400).json({
         success: false,
@@ -23,7 +22,6 @@ export const signup = async (req, res, next) => {
       });
     }
 
-    // fallback
     res.status(500).json({
       success: false,
       message: 'Server error',

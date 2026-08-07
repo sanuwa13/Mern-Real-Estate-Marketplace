@@ -22,7 +22,7 @@ const listingSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    discountPrice: { // 👈 FIXED: Changed from discountedPrice to discountPrice
+    discountPrice: { 
       type: Number,
       required: true,
     },
