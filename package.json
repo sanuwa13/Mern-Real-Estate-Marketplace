@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon api/index.js",
-    "start": "node api/index.js"
+    "start": "node api/index.js",
+    "build": "npm install && npm install --prefix client && npm run build --prefix client"
   },
   "repository": {
     "type": "git",
@@ -20,19 +21,16 @@
   },
   "homepage": "https://github.com/sanuwa13/Mern-Real-Estate-Marketplace#readme",
   "dependencies": {
-    "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
-    "js": "^0.1.0",
+    "express-rate-limit": "^8.7.2",
     "jsonwebtoken": "^9.0.3",
-    "mongodb": "^7.0.0",
-    "mongoose": "^9.1.1",
-    "nodemon": "^3.1.11",
-    "redux-persist": "^6.0.0"
+    "mongoose": "^9.1.1"
   },
   "devDependencies": {
+    "nodemon": "^3.1.14",
     "prettier": "^3.9.4"
   }
 }
