@@ -20,6 +20,7 @@ import {
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { validateImage, deleteImage, deleteImages } from "../utils/images";
 
 export default function Profile() {
   const fileRef = useRef(null);
@@ -41,6 +42,10 @@ export default function Profile() {
   }, [file]);
 
   const handleFileUpload = (file) => {
+    if (validateImage(file)) {
+      setFileUploadError(true);
+      return;
+    }
     const storage = getStorage(app);
     const fileName = new Date().getTime() + file.name;
     const storageRef = ref(storage, fileName);
@@ -61,7 +66,7 @@ export default function Profile() {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
-          setFormData({ ...formData, avatar: downloadURL }),
+          setFormData((prev) => ({ ...prev, avatar: downloadURL })),
         );
       },
     );
@@ -90,6 +95,9 @@ export default function Profile() {
         dispatch(updateUserFailure(data.message));
         return;
       }
+      if (formData.avatar && currentUser?.avatar !== formData.avatar) {
+        deleteImage(currentUser?.avatar);
+      }
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
     } catch (error) {
@@ -98,8 +106,18 @@ export default function Profile() {
   };
 
   const handleDeleteUser = async () => {
+    if (
+      !window.confirm(
+        "Delete your account and all your listings? This cannot be undone.",
+      )
+    ) {
+      return;
+    }
     try {
       dispatch(deleteUserStart());
+      // collect the image links first, the listings are gone once the account is deleted
+      const listingsRes = await fetch(`/api/user/listings/${currentUser?._id}`);
+      const listings = listingsRes.ok ? await listingsRes.json() : [];
       const res = await fetch(`/api/user/delete/${currentUser?._id}`, {
         method: "DELETE",
       });
@@ -108,6 +126,10 @@ export default function Profile() {
         dispatch(deleteUserFailure(data.message));
         return;
       }
+      await deleteImages([
+        currentUser?.avatar,
+        ...listings.flatMap((listing) => listing.imageUrls || []),
+      ]);
       dispatch(deleteUserSuccess());
     } catch (error) {
       dispatch(deleteUserFailure(error.message));
@@ -140,27 +162,28 @@ export default function Profile() {
       }
 
       setUserListings(data);
-      console.log(data);
     } catch (error) {
       setShowListingsError(true);
     }
   };
 
-  const handleListingDelete = async (listingId) => {
+  const handleListingDelete = async (listing) => {
+    if (!window.confirm(`Delete "${listing.name}"?`)) return;
     try {
-      const res = await fetch(`/api/listing/delete/${listingId}`, {
+      const res = await fetch(`/api/listing/delete/${listing._id}`, {
         method: "DELETE",
       });
       const data = await res.json();
       if (data.success === false) {
-        console.log(data.message);
+        setShowListingsError(true);
         return;
       }
+      deleteImages(listing.imageUrls);
       setUserListings((prevListings) =>
-        prevListings.filter((listing) => listing._id !== listingId),
+        prevListings.filter((item) => item._id !== listing._id),
       );
     } catch (error) {
-      console.log(error.message);
+      setShowListingsError(true);
     }
   };
 
@@ -299,7 +322,7 @@ export default function Profile() {
 
               <div className="flex flex-col items-center">
                 <button
-                  onClick={() => handleListingDelete(listing._id)}
+                  onClick={() => handleListingDelete(listing)}
                   className="text-red-700 uppercase"
                 >
                   Delete

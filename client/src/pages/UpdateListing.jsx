@@ -6,14 +6,15 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
-import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { validateImage, deleteImage, deleteImages } from "../utils/images";
 
 export default function UpdateListing() {
-  const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const params = useParams();
   const [files, setFiles] = useState([]);
+  // images already saved on the listing; only removed from storage once the update is saved
+  const [savedImageUrls, setSavedImageUrls] = useState([]);
   const [formData, setFormData] = useState({
     imageUrls: [],
     name: "",
@@ -51,6 +52,7 @@ export default function UpdateListing() {
           discountPrice: data.discountPrice ?? data.discountedPrice ?? 0,
           imageUrls: data.imageUrls || [],
         });
+        setSavedImageUrls(data.imageUrls || []);
       } catch (err) {
         setError("Failed to fetch listing data");
       }
@@ -62,6 +64,12 @@ export default function UpdateListing() {
   const handleImageSubmit = (e) => {
     if (files.length === 0) {
       setImageUploadError("Please select at least one image to upload first");
+      return;
+    }
+
+    const invalidFile = files.map(validateImage).find(Boolean);
+    if (invalidFile) {
+      setImageUploadError(invalidFile);
       return;
     }
 
@@ -103,11 +111,7 @@ export default function UpdateListing() {
 
       uploadTask.on(
         "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log(`Upload is ${progress}% done`);
-        },
+        null,
         (error) => {
           reject(error);
         },
@@ -125,6 +129,8 @@ export default function UpdateListing() {
   };
 
   const handleRemoveUploadedImage = (index) => {
+    const url = formData.imageUrls[index];
+    if (!savedImageUrls.includes(url)) deleteImage(url);
     setFormData({
       ...formData,
       imageUrls: formData.imageUrls.filter((_, i) => i !== index),
@@ -191,7 +197,6 @@ export default function UpdateListing() {
           bedrooms: Number(formData.bedrooms),
           bathrooms: Number(formData.bathrooms),
           discountPrice: formData.offer ? Number(formData.discountPrice) : 0,
-          userRef: currentUser?._id,
         }),
       });
       const data = await res.json();
@@ -200,6 +205,9 @@ export default function UpdateListing() {
       if (data.success === false) {
         setError(data.message);
       } else {
+        await deleteImages(
+          savedImageUrls.filter((url) => !formData.imageUrls.includes(url))
+        );
         navigate(`/listing/${data._id}`);
       }
     } catch (error) {

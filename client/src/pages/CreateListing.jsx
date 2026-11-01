@@ -6,11 +6,10 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { validateImage, deleteImage } from "../utils/images";
 
 export default function CreateListing() {
-  const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({
@@ -36,6 +35,12 @@ export default function CreateListing() {
   const handleImageSubmit = (e) => {
     if (files.length === 0) {
       setImageUploadError("Please select at least one image to upload first");
+      return;
+    }
+
+    const invalidFile = files.map(validateImage).find(Boolean);
+    if (invalidFile) {
+      setImageUploadError(invalidFile);
       return;
     }
 
@@ -77,11 +82,7 @@ export default function CreateListing() {
 
       uploadTask.on(
         "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log(`Upload is ${progress} % done`);
-        },
+        null,
         (error) => {
           reject(error);
         },
@@ -99,6 +100,8 @@ export default function CreateListing() {
   };
 
   const handleRemoveUploadedImage = (index) => {
+    // not saved in any listing yet, so it can be removed from storage straight away
+    deleteImage(formData.imageUrls[index]);
     setFormData({
       ...formData,
       imageUrls: formData.imageUrls.filter((_, i) => i !== index),
@@ -165,7 +168,6 @@ export default function CreateListing() {
           bedrooms: Number(formData.bedrooms),
           bathrooms: Number(formData.bathrooms),
           discountPrice: formData.offer ? Number(formData.discountPrice) : 0,
-          userRef: currentUser?._id,
         }),
       });
       const data = await res.json();
