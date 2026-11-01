@@ -1,0 +1,17 @@
+rules_version = '2';
+
+// Paste these into Firebase console > Storage > Rules and publish.
+// The site signs users in with its own JWT, not Firebase Auth, so Firebase
+// can't tell who is uploading. These rules at least enforce the 2 MB image limit.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{fileName} {
+      allow read: if true;
+      allow create: if request.resource.size < 2 * 1024 * 1024
+                    && request.resource.contentType.matches('image/.*');
+      // needed so the site can remove images that are no longer used
+      allow delete: if true;
+      allow update: if false;
+    }
+  }
+}
