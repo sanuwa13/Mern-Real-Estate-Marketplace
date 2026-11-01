@@ -22,9 +22,9 @@ const listingSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    discountPrice: { 
+    discountPrice: {
       type: Number,
-      required: true,
+      default: 0,
     },
     bathrooms: {
       type: Number,
@@ -44,6 +44,7 @@ const listingSchema = new mongoose.Schema(
     },
     type: {
       type: String,
+      enum: ['rent', 'sale'],
       required: true,
     },
     offer: {
