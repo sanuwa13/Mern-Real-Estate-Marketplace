@@ -11,8 +11,32 @@ import UpdateListing from "./pages/UpdateListing";
 import Listing from "./pages/Listing";
 import Search from "./pages/Search";
 import Footer from "./components/Footer";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { signoutUserSuccess, updateUserSuccess } from "./redux/user/userSlice";
 
 export default function App() {
+  const { currentUser } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  // the saved login can outlive the server session, so check it once when the site opens
+  useEffect(() => {
+    if (!currentUser) return;
+    const checkSession = async () => {
+      try {
+        const res = await fetch(`/api/user/${currentUser._id}`);
+        if (res.ok) {
+          dispatch(updateUserSuccess(await res.json()));
+        } else if ([401, 403, 404].includes(res.status)) {
+          dispatch(signoutUserSuccess());
+        }
+      } catch {
+        // offline or server down: keep the saved login
+      }
+    };
+    checkSession();
+  }, []);
+
   return (
     <BrowserRouter>
       {/* 👈 Added flex container so Footer stays anchored at the bottom */}
