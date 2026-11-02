@@ -11,9 +11,6 @@ import {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
-  deleteUserStart,
-  deleteUserSuccess,
-  deleteUserFailure,
   signoutUserFailure,
   signoutUserStart,
   signoutUserSuccess,
@@ -109,37 +106,6 @@ export default function Profile() {
       setUpdateSuccess(true);
     } catch (error) {
       dispatch(updateUserFailure(error.message));
-    }
-  };
-
-  const handleDeleteUser = async () => {
-    if (
-      !window.confirm(
-        "Delete your account and all your listings? This cannot be undone.",
-      )
-    ) {
-      return;
-    }
-    try {
-      dispatch(deleteUserStart());
-      // collect the image links first, the listings are gone once the account is deleted
-      const listingsRes = await fetch(`/api/user/listings/${currentUser?._id}`);
-      const listings = listingsRes.ok ? await listingsRes.json() : [];
-      const res = await fetch(`/api/user/delete/${currentUser?._id}`, {
-        method: "DELETE",
-      });
-      const data = await res.json();
-      if (data.success === false) {
-        dispatch(deleteUserFailure(data.message));
-        return;
-      }
-      await deleteImages([
-        currentUser?.avatar,
-        ...listings.flatMap((listing) => listing.imageUrls || []),
-      ]);
-      dispatch(deleteUserSuccess());
-    } catch (error) {
-      dispatch(deleteUserFailure(error.message));
     }
   };
 
@@ -242,10 +208,11 @@ export default function Profile() {
         <input
           type="email"
           placeholder="email"
-          defaultValue={currentUser?.email}
+          value={currentUser?.email || ""}
           id="email"
-          className="border p-3 rounded-lg"
-          onChange={handleChange}
+          title="The owner email is set by ADMIN_EMAIL on the server"
+          className="border p-3 rounded-lg bg-slate-100 text-slate-500"
+          readOnly
         />
         <input
           type="password"
@@ -270,13 +237,7 @@ export default function Profile() {
         </Link>
       </form>
 
-      <div className="flex justify-between mt-5">
-        <span
-          onClick={handleDeleteUser}
-          className="text-red-700 cursor-pointer"
-        >
-          Delete Account
-        </span>
+      <div className="flex justify-end mt-5">
         <span onClick={handleSignOut} className="text-red-700 cursor-pointer">
           Sign Out
         </span>
@@ -291,7 +252,7 @@ export default function Profile() {
         onClick={handleShowListings}
         className="text-green-700 w-full mt-5 font-semibold hover:underline"
       >
-        Show Listings
+        Show All Listings
       </button>
 
       <p className="text-red-700 mt-5 text-center text-sm">
@@ -301,7 +262,7 @@ export default function Profile() {
       {userListings && userListings.length > 0 && (
         <div className="flex flex-col gap-4">
           <h1 className="text-center mt-7 text-2xl font-semibold">
-            Your Listings
+            All Listings
           </h1>
           {userListings.map((listing) => (
             <div

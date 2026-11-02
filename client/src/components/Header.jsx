@@ -58,17 +58,16 @@ export default function Header() {
               About
             </li>
           </Link>
-          <Link to={currentUser ? '/profile' : '/sign-in'}>
-            {currentUser ? (
+          {/* only the owner signs in (at /sign-in), so visitors don't see a sign-in link */}
+          {currentUser && (
+            <Link to='/profile'>
               <img 
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcPVY5FK0TbQhg_WSDUKRuOEWDHwfvaHFCjA&s"
+                src={currentUser.avatar || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcPVY5FK0TbQhg_WSDUKRuOEWDHwfvaHFCjA&s"}
                 alt='User profile'
                 className='h-8 w-8 rounded-full object-cover'
               />
-            ) : (
-              <li className='text-slate-700 hover:underline'>Sign in</li>
-            )}
-          </Link>
+            </Link>
+          )}
         </ul>
       </div>
     </header>

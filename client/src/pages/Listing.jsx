@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
-import { useSelector } from "react-redux";
 import {
   FaMapMarkerAlt,
   FaShare,
@@ -13,18 +12,15 @@ import {
   FaChair,
   FaPhone,
 } from "react-icons/fa";
-import Contact from "../components/Contact.jsx";
 
 export default function Listing() {
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [contact, setContact] = useState(false);
   const [showPhone, setShowPhone] = useState(false);
   const params = useParams();
 
-  const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -172,40 +168,26 @@ export default function Listing() {
               </li>
             </ul>
 
-            {/* Contact Landlord & Call Owner Action Buttons */}
-            {currentUser && listing.userRef !== currentUser._id && (
-              <div className="flex flex-col gap-3 mt-3">
-                {!contact && (
+            {/* Call Owner button, visible to every visitor */}
+            {listing.phone && (
+              <div className="mt-3">
+                {!showPhone ? (
                   <button
-                    onClick={() => setContact(true)}
-                    className="bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3 font-semibold"
+                    onClick={() => setShowPhone(true)}
+                    className="bg-green-700 text-white rounded-lg uppercase hover:opacity-95 p-3 font-semibold w-full"
                   >
-                    Contact Owner (Email)
+                    Show Phone Number
                   </button>
-                )}
-
-                {listing.phone && (
-                  <div>
-                    {!showPhone ? (
-                      <button
-                        onClick={() => setShowPhone(true)}
-                        className="bg-green-700 text-white rounded-lg uppercase hover:opacity-95 p-3 font-semibold w-full"
-                      >
-                        Show Phone Number
-                      </button>
-                    ) : (
-                      <a
-                        href={`tel:${listing.phone}`}
-                        className="bg-green-800 text-white text-center rounded-lg p-3 font-semibold flex items-center justify-center gap-2 hover:opacity-95 text-lg"
-                      >
-                        <FaPhone /> Call Owner: {listing.phone}
-                      </a>
-                    )}
-                  </div>
+                ) : (
+                  <a
+                    href={`tel:${listing.phone}`}
+                    className="bg-green-800 text-white text-center rounded-lg p-3 font-semibold flex items-center justify-center gap-2 hover:opacity-95 text-lg"
+                  >
+                    <FaPhone /> Call Owner: {listing.phone}
+                  </a>
                 )}
               </div>
             )}
-            {contact && <Contact listing={listing} />}
           </div>
         </div>
       )}
