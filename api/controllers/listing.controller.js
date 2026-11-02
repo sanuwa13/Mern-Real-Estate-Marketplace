@@ -80,7 +80,7 @@ export const updateListing = async (req, res, next) => {
     const updatedListing = await Listing.findByIdAndUpdate(
       req.params.id,
       { $set: pickListingFields(req.body) },
-      { new: true, runValidators: true }
+      { returnDocument: "after", runValidators: true }
     );
     res.status(200).json(updatedListing);
   } catch (error) {

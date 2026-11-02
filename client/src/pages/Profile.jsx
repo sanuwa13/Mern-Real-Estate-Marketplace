@@ -52,29 +52,36 @@ export default function Profile() {
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     setFileUploadError(false);
+    setFilePerc(1);
 
     uploadTask.on(
       "state_changed",
       (snapshot) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setFilePerc(Math.round(progress));
+        // stay below 100 until the download link is ready, so Update can't save without the new avatar
+        setFilePerc(Math.min(Math.round(progress), 99));
       },
       (error) => {
         console.error("Upload error:", error);
         setFileUploadError(true);
+        setFilePerc(0);
       },
       () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
-          setFormData((prev) => ({ ...prev, avatar: downloadURL })),
-        );
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setFormData((prev) => ({ ...prev, avatar: downloadURL }));
+          setFilePerc(100);
+        });
       },
     );
   };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
   };
+
+  const avatarUploading = filePercent > 0 && filePercent < 100;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -249,10 +256,10 @@ export default function Profile() {
         />
 
         <button
-          disabled={loading}
+          disabled={loading || avatarUploading}
           className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80"
         >
-          {loading ? "Loading..." : "Update"}
+          {loading ? "Loading..." : avatarUploading ? "Uploading photo..." : "Update"}
         </button>
 
         <Link

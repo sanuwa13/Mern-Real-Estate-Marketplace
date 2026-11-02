@@ -47,7 +47,7 @@ export const updateUser = async (req, res, next) => {
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
       { $set: updates },
-      { new: true },
+      { returnDocument: "after" },
     );
     if (!updatedUser) return next(errorHandler(404, "User not found"));
     const { password, ...rest } = updatedUser._doc;

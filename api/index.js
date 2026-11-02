@@ -50,7 +50,9 @@ if (isProduction) {
 }
 
 app.use((err, req, res, next) => {
-    const statusCode = err.statusCode || 500;
+    // bad input such as an unknown listing type or a malformed id is the visitor's mistake, not a server error
+    const isBadInput = err.name === 'ValidationError' || err.name === 'CastError';
+    const statusCode = err.statusCode || (isBadInput ? 400 : 500);
     const message = err.message || 'Internal Server Error';
     return res.status(statusCode).json({
         success: false,
