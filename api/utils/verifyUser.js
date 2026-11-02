@@ -1,5 +1,11 @@
 import jwt from 'jsonwebtoken';
 import { errorHandler } from './error.js';
+import User from '../models/user.model.js';
+
+export const isAdminEmail = (email) =>
+    !!process.env.ADMIN_EMAIL &&
+    typeof email === 'string' &&
+    email.trim().toLowerCase() === process.env.ADMIN_EMAIL.trim().toLowerCase();
 
 export const verifyToken = (req, res, next) => {
     const token = req.cookies.access_token;
@@ -18,13 +24,18 @@ export const verifyToken = (req, res, next) => {
     });
 };
 
-// for public routes that show extra details to signed in users; returns null instead of failing
-export const getUserIdFromToken = (req) => {
-    const token = req.cookies.access_token;
-    if (!token) return null;
-    try {
-        return jwt.verify(token, process.env.JWT_SECRET).id;
-    } catch {
-        return null;
-    }
+// only the site owner (ADMIN_EMAIL) gets past this, checked against the database on every request
+export const verifyAdmin = (req, res, next) => {
+    verifyToken(req, res, async (err) => {
+        if (err) return next(err);
+        try {
+            const user = await User.findById(req.user.id);
+            if (!user || !isAdminEmail(user.email)) {
+                return next(errorHandler(403, 'Only the site owner can do this'));
+            }
+            next();
+        } catch (error) {
+            next(error);
+        }
+    });
 };

@@ -10,6 +10,10 @@ import listingRouter from './routes/listing.route.js';
 import cookieParser from 'cookie-parser';
 dotenv.config();
 
+if (!process.env.ADMIN_EMAIL) {
+  console.warn('ADMIN_EMAIL is not set in .env, so nobody can sign in or post listings');
+}
+
 mongoose.connect(process.env.MONGO)
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('MongoDB connection error:', err));
@@ -25,7 +29,7 @@ app.use(express.json());
 
 app.use(cookieParser());
 
-// slows down password guessing and fake account creation
+// slows down password guessing on the owner login
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 20,
@@ -36,7 +40,6 @@ const authLimiter = rateLimit({
 
 app.use('/api/user', userRouter);
 app.use('/api/auth/signin', authLimiter);
-app.use('/api/auth/signup', authLimiter);
 app.use('/api/auth', authRouter);
 app.use('/api/listing', listingRouter);
 
