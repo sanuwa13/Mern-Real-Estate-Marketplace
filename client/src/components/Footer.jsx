@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { 
+import { useSelector } from 'react-redux';
+import {
   FaHome, 
   FaPhoneAlt, 
   FaEnvelope, 
@@ -11,6 +12,8 @@ import {
 } from 'react-icons/fa';
 
 export default function Footer() {
+  const { currentUser } = useSelector((state) => state.user);
+
   return (
     <footer className='bg-slate-900 text-slate-300 border-t border-slate-800 pt-12 pb-6'>
       <div className='max-w-6xl mx-auto px-4'>
@@ -81,9 +84,12 @@ export default function Footer() {
             <Link to='/search' className='text-sm text-slate-400 hover:text-white transition-colors w-fit'>
               Search Properties
             </Link>
-            <Link to='/create-listing' className='text-sm text-slate-400 hover:text-white transition-colors w-fit'>
-              List Your Property
-            </Link>
+            {/* only the owner can post listings */}
+            {currentUser && (
+              <Link to='/create-listing' className='text-sm text-slate-400 hover:text-white transition-colors w-fit'>
+                List Your Property
+              </Link>
+            )}
           </div>
 
           {/* Column 3: Property Types */}
@@ -138,6 +144,13 @@ export default function Footer() {
             </Link>
             <Link to='#' className='hover:text-slate-300 transition-colors'>
               Support
+            </Link>
+            {/* only the owner can sign in, so this stays small and out of the way */}
+            <Link
+              to={currentUser ? '/profile' : '/sign-in'}
+              className='hover:text-slate-300 transition-colors'
+            >
+              {currentUser ? 'Owner dashboard' : 'Owner login'}
             </Link>
           </div>
         </div>
