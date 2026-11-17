@@ -11,6 +11,7 @@ import Listing from "./pages/Listing";
 import Search from "./pages/Search";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
+import BackToTop from "./components/BackToTop";
 import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -69,6 +70,7 @@ export default function App() {
         </main>
 
         <Footer />
+        <BackToTop />
       </div>
     </BrowserRouter>
   );

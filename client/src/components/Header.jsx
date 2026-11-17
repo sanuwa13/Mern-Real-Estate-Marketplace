@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { FiMenu, FiSearch, FiX } from "react-icons/fi";
@@ -31,6 +31,16 @@ export default function Header() {
     setMenuOpen(false);
   }
 
+  // on the home page the header sits see-through over the hero until you scroll
+  const isHome = location.pathname === "/";
+  const [scrolled, setScrolled] = useState(() => window.scrollY > 40);
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  const overlay = isHome && !scrolled && !menuOpen;
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const urlParams = new URLSearchParams(location.pathname === "/search" ? location.search : "");
@@ -54,7 +64,9 @@ export default function Header() {
         type="text"
         placeholder="Search by name"
         aria-label="Search properties"
-        className="input h-11 pl-11"
+        className={`input h-11 pl-11 ${
+          overlay ? "border-white/30 bg-white/10 text-white placeholder:text-white/60 focus:border-white" : ""
+        }`}
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
       />
@@ -62,17 +74,27 @@ export default function Header() {
   );
 
   return (
-    <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white/95 backdrop-blur">
+    <header
+      className={`${isHome ? "fixed inset-x-0" : "sticky"} top-0 z-40 border-b transition-colors duration-300 ${
+        overlay ? "border-transparent bg-transparent" : "border-neutral-200 bg-white/95 backdrop-blur"
+      }`}
+    >
       <div className="page flex h-20 items-center gap-8">
-        <Logo />
+        <Logo inverted={overlay} />
 
         <nav className="hidden items-center gap-8 lg:flex" aria-label="Main">
           {NAV_LINKS.map((link) => (
             <NavLink
               key={link.label}
               to={link.to}
-              className={`text-sm transition-colors hover:text-ink ${
-                isActive(link.to) ? "text-ink underline underline-offset-[10px]" : "text-neutral-500"
+              className={`text-sm transition-colors ${
+                overlay
+                  ? isActive(link.to)
+                    ? "text-white underline underline-offset-[10px]"
+                    : "text-white/70 hover:text-white"
+                  : isActive(link.to)
+                    ? "text-ink underline underline-offset-[10px]"
+                    : "text-neutral-500 hover:text-ink"
               }`}
             >
               {link.label}
@@ -98,7 +120,9 @@ export default function Header() {
 
         <button
           type="button"
-          className="ml-auto flex h-11 w-11 items-center justify-center border border-neutral-300 md:ml-0 lg:hidden"
+          className={`ml-auto flex h-11 w-11 items-center justify-center border md:ml-0 lg:hidden ${
+            overlay ? "border-white/40 text-white" : "border-neutral-300"
+          }`}
           onClick={() => setMenuOpen((open) => !open)}
           aria-expanded={menuOpen}
           aria-label={menuOpen ? "Close menu" : "Open menu"}

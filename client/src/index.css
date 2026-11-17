@@ -103,3 +103,102 @@
   font-size: 12px;
   letter-spacing: 0.05em;
 }
+
+/* ---------- home page motion ---------- */
+
+/* scroll reveal (components/Reveal.jsx) */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* hero text rising in on page load */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-rise {
+  opacity: 0;
+  animation: rise 1s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+
+/* slow zoom on the active hero photo */
+@keyframes slow-zoom {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.12);
+  }
+}
+
+.hero-zoom {
+  animation: slow-zoom 9s ease-out forwards;
+}
+
+/* hero slide progress bar */
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.animate-grow {
+  transform-origin: left;
+  animation: grow linear forwards;
+}
+
+/* endless scrolling band of words */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee 45s linear infinite;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px #0a0a0a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .animate-rise {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: none;
+  }
+
+  .hero-zoom,
+  .marquee-track,
+  .animate-grow {
+    animation: none;
+  }
+}
