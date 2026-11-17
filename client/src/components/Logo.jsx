@@ -13,7 +13,7 @@ export default function Logo({ inverted = false }) {
           strokeWidth="2"
         />
       </svg>
-      <span className="font-serif text-2xl leading-none tracking-tight">Own Property</span>
+      <span className="font-serif text-2xl leading-none">Own Property</span>
     </Link>
   );
 }

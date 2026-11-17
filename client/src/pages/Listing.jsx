@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Keyboard } from "swiper/modules";
 import "swiper/css/bundle";
 import { FiArrowLeft, FiCheck, FiLink, FiMapPin, FiPhone } from "react-icons/fi";
-import { formatPrice, plural } from "../utils/format";
+import { formatPrice, listingPrices, plural } from "../utils/format";
 
 export default function Listing() {
   const [listing, setListing] = useState(null);
@@ -71,10 +71,7 @@ export default function Listing() {
   }
 
   const listingImages = listing.imageUrls || listing.imagesUrls || [];
-  const regularPrice = Number(listing.regularPrice || 0);
-  const discountPrice = Number(listing.discountPrice ?? listing.discountedPrice ?? 0);
-  const discountSavings = regularPrice - discountPrice;
-  const price = listing.offer ? discountPrice : regularPrice;
+  const { regular: regularPrice, discount: discountPrice, hasDiscount, price } = listingPrices(listing);
 
   const facts = [
     { label: "Bedrooms", value: listing.bedrooms },
@@ -165,10 +162,10 @@ export default function Listing() {
                   <span className="font-sans text-base text-neutral-500"> / month</span>
                 )}
               </p>
-              {listing.offer && discountSavings > 0 && (
+              {hasDiscount && (
                 <p className="mt-3 text-sm text-neutral-500">
                   <span className="line-through">{formatPrice(regularPrice)}</span>
-                  <span className="ml-2 text-ink">Save {formatPrice(discountSavings)}</span>
+                  <span className="ml-2 text-ink">Save {formatPrice(regularPrice - discountPrice)}</span>
                 </p>
               )}
 

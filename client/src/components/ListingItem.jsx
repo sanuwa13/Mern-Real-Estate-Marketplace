@@ -1,14 +1,12 @@
 import { Link } from "react-router-dom";
-import { formatPrice, plural } from "../utils/format";
+import { formatPrice, listingPrices, plural } from "../utils/format";
 
 const FALLBACK_IMAGE =
   "https://53.fs1.hubspotusercontent-na1.net/hub/53/hubfs/Sales_Blog/real-estate-business-compressor.png";
 
 export default function ListingItem({ listing }) {
   const coverImage = listing?.imageUrls?.[0] || listing?.imagesUrls?.[0] || FALLBACK_IMAGE;
-  const price = listing.offer
-    ? Number(listing?.discountPrice ?? listing?.discountedPrice ?? 0)
-    : Number(listing?.regularPrice || 0);
+  const { price } = listingPrices(listing);
 
   return (
     <Link to={`/listing/${listing._id}`} className="group block">
@@ -17,7 +15,11 @@ export default function ListingItem({ listing }) {
           src={coverImage}
           alt={listing.name}
           loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+          // a missing photo leaves the plain grey frame instead of a broken-image icon
+          onError={(e) => {
+            e.currentTarget.style.visibility = "hidden";
+          }}
+          className="h-full w-full object-cover text-transparent transition-transform duration-700 ease-out group-hover:scale-[1.03]"
         />
         <div className="absolute left-3 top-3 flex gap-2">
           <span className="bg-white px-2.5 py-1 text-[10px] font-medium uppercase tracking-label text-ink">

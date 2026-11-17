@@ -32,7 +32,7 @@ function ListingSection({ eyebrow, title, to, listings, loading }) {
   if (!loading && listings.length === 0) return null;
 
   return (
-    <section className="page py-16 sm:py-20">
+    <section className="page">
       <div className="flex flex-wrap items-end justify-between gap-4 border-b border-neutral-200 pb-6">
         <div>
           <p className="eyebrow">{eyebrow}</p>
@@ -46,7 +46,9 @@ function ListingSection({ eyebrow, title, to, listings, loading }) {
         {loading ? (
           <ListingGridSkeleton count={4} />
         ) : (
-          listings.map((listing) => <ListingItem key={listing._id} listing={listing} />)
+          listings.map((listing) => (
+            <ListingItem key={listing._id} listing={listing} />
+          ))
         )}
       </div>
     </section>
@@ -81,7 +83,10 @@ export default function Home() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    const params = new URLSearchParams({ searchTerm: search.searchTerm, type: search.type });
+    const params = new URLSearchParams({
+      searchTerm: search.searchTerm,
+      type: search.type,
+    });
     navigate(`/search?${params.toString()}`);
   };
 
@@ -98,8 +103,10 @@ export default function Home() {
         )}
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/40 to-ink/20" />
 
-        <div className="page flex min-h-[78vh] flex-col justify-end pb-16 pt-32 sm:pb-20">
-          <p className="eyebrow text-neutral-300">Real estate across Sri Lanka</p>
+        <div className="page flex min-h-[min(80vh,760px)] flex-col justify-end pb-16 pt-32 sm:pb-20">
+          <p className="eyebrow text-neutral-300">
+            Real estate across Sri Lanka
+          </p>
           <h1 className="heading mt-5 max-w-4xl text-5xl text-white sm:text-7xl lg:text-8xl">
             Find a place worth <em>calling home.</em>
           </h1>
@@ -118,7 +125,9 @@ export default function Home() {
               aria-label="Search by property name"
               className="h-14 border-0 bg-white px-5 text-sm text-ink placeholder:text-neutral-400 focus:outline-none"
               value={search.searchTerm}
-              onChange={(e) => setSearch({ ...search, searchTerm: e.target.value })}
+              onChange={(e) =>
+                setSearch({ ...search, searchTerm: e.target.value })
+              }
             />
             <select
               aria-label="Listing type"
@@ -167,27 +176,29 @@ export default function Home() {
         </div>
       </section>
 
-      <ListingSection
-        eyebrow="Reduced prices"
-        title="Current offers"
-        to="/search?offer=true"
-        listings={offerListings}
-        loading={loading}
-      />
-      <ListingSection
-        eyebrow="Monthly terms"
-        title="Recently listed for rent"
-        to="/search?type=rent"
-        listings={rentListings}
-        loading={loading}
-      />
-      <ListingSection
-        eyebrow="To own"
-        title="Recently listed for sale"
-        to="/search?type=sale"
-        listings={saleListings}
-        loading={loading}
-      />
+      <div className="space-y-20 py-16 sm:space-y-24 sm:py-20">
+        <ListingSection
+          eyebrow="Reduced prices"
+          title="Current offers"
+          to="/search?offer=true"
+          listings={offerListings}
+          loading={loading}
+        />
+        <ListingSection
+          eyebrow="Monthly terms"
+          title="Recently listed for rent"
+          to="/search?type=rent"
+          listings={rentListings}
+          loading={loading}
+        />
+        <ListingSection
+          eyebrow="To own"
+          title="Recently listed for sale"
+          to="/search?type=sale"
+          listings={saleListings}
+          loading={loading}
+        />
+      </div>
 
       {/* Closing call to action */}
       <section className="bg-neutral-100">
