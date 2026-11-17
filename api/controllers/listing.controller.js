@@ -129,3 +129,18 @@ export const getListings = async (req, res, next) => {
     next(error);
   }
 };
+
+// counts for the home page figures
+export const getListingStats = async (req, res, next) => {
+  try {
+    const [total, sale, rent, offers] = await Promise.all([
+      Listing.countDocuments(),
+      Listing.countDocuments({ type: "sale" }),
+      Listing.countDocuments({ type: "rent" }),
+      Listing.countDocuments({ offer: true }),
+    ]);
+    res.status(200).json({ total, sale, rent, offers });
+  } catch (error) {
+    next(error);
+  }
+};
