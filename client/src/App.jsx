@@ -10,6 +10,8 @@ import UpdateListing from "./pages/UpdateListing";
 import Listing from "./pages/Listing";
 import Search from "./pages/Search";
 import Footer from "./components/Footer";
+import ScrollToTop from "./components/ScrollToTop";
+import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { signoutUserSuccess, updateUserSuccess } from "./redux/user/userSlice";
@@ -39,11 +41,11 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      {/* 👈 Added flex container so Footer stays anchored at the bottom */}
-      <div className="flex flex-col min-h-screen">
+      <ScrollToTop />
+      {/* footer stays at the bottom on short pages */}
+      <div className="flex min-h-screen flex-col">
         <Header />
 
-        {/* 👈 flex-1 expands to fill available space */}
         <main className="flex-1">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -61,6 +63,8 @@ export default function App() {
                 element={<UpdateListing />}
               />
             </Route>
+
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
 

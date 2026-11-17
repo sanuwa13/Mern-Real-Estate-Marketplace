@@ -1,51 +1,53 @@
-import { Link } from 'react-router-dom'; 
-import { MdLocationOn } from 'react-icons/md';
+import { Link } from "react-router-dom";
+import { formatPrice, plural } from "../utils/format";
+
+const FALLBACK_IMAGE =
+  "https://53.fs1.hubspotusercontent-na1.net/hub/53/hubfs/Sales_Blog/real-estate-business-compressor.png";
 
 export default function ListingItem({ listing }) {
-  const coverImage =
-    listing?.imageUrls?.[0] ||
-    listing?.imagesUrls?.[0] ||
-    'https://53.fs1.hubspotusercontent-na1.net/hub/53/hubfs/Sales_Blog/real-estate-business-compressor.png';
-
+  const coverImage = listing?.imageUrls?.[0] || listing?.imagesUrls?.[0] || FALLBACK_IMAGE;
   const price = listing.offer
     ? Number(listing?.discountPrice ?? listing?.discountedPrice ?? 0)
     : Number(listing?.regularPrice || 0);
 
   return (
-    <div className='bg-white shadow-md hover:shadow-lg transition-shadow overflow-hidden rounded-lg w-full sm:w-[265px]'>
-      <Link to={`/listing/${listing._id}`}>
+    <Link to={`/listing/${listing._id}`} className="group block">
+      <div className="relative aspect-[4/3] overflow-hidden bg-neutral-100">
         <img
           src={coverImage}
-          alt='listing cover'
-          className='w-full h-[200px] sm:h-[170px] object-cover hover:scale-105 transition-transform duration-300'
+          alt={listing.name}
+          loading="lazy"
+          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
         />
-        <div className='p-3 flex flex-col gap-2 w-full'>
-          <p className='text-base font-semibold text-slate-700 truncate'>
-            {listing.name}
-          </p>
-          <div className='flex items-center gap-1'>
-            <MdLocationOn className='h-4 w-4 text-green-700' />
-            <p className='text-xs text-gray-600 truncate w-full'>
-              {listing.address}
-            </p>
-          </div>
-          <p className='text-xs text-gray-600 line-clamp-2'>
-            {listing.description}
-          </p>
-          <p className='mt-1 font-semibold text-slate-500 text-sm'>
-            Rs. {price.toLocaleString("en-US")}
-            {listing.type === 'rent' && ' / month'}
-          </p>
-          <div className='text-slate-700 flex gap-3 text-xs font-bold'>
-            <div>
-              {listing.bedrooms > 1 ? `${listing.bedrooms} Beds` : `${listing.bedrooms} Bed`}
-            </div>
-            <div>
-              {listing.bathrooms > 1 ? `${listing.bathrooms} Baths` : `${listing.bathrooms} Bath`}
-            </div>
-          </div>
+        <div className="absolute left-3 top-3 flex gap-2">
+          <span className="bg-white px-2.5 py-1 text-[10px] font-medium uppercase tracking-label text-ink">
+            {listing.type === "rent" ? "For rent" : "For sale"}
+          </span>
+          {listing.offer && (
+            <span className="bg-ink px-2.5 py-1 text-[10px] font-medium uppercase tracking-label text-white">
+              Offer
+            </span>
+          )}
         </div>
-      </Link>
-    </div>
+      </div>
+
+      <div className="pt-4">
+        <p className="text-lg font-medium tracking-tight">
+          {formatPrice(price)}
+          {listing.type === "rent" && (
+            <span className="text-sm font-normal text-neutral-500"> / month</span>
+          )}
+        </p>
+        <h3 className="mt-1 truncate text-sm text-ink group-hover:underline group-hover:underline-offset-4">
+          {listing.name}
+        </h3>
+        <p className="mt-1 truncate text-sm text-neutral-500">{listing.address}</p>
+        <p className="mt-3 border-t border-neutral-200 pt-3 text-xs uppercase tracking-label text-neutral-600">
+          {plural(listing.bedrooms, "bed")}
+          <span className="mx-2 text-neutral-300">/</span>
+          {plural(listing.bathrooms, "bath")}
+        </p>
+      </div>
+    </Link>
   );
 }
