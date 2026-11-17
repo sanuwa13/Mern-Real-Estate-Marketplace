@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Keyboard } from "swiper/modules";
-import "swiper/css/bundle";
 import { FiArrowLeft, FiCheck, FiLink, FiMapPin, FiPhone } from "react-icons/fi";
 import { formatPrice, listingPrices, plural } from "../utils/format";
+import PhotoGallery from "../components/PhotoGallery";
 
 export default function Listing() {
   const [listing, setListing] = useState(null);
@@ -45,9 +43,10 @@ export default function Listing() {
 
   if (loading) {
     return (
-      <div className="animate-pulse" aria-label="Loading property">
-        <div className="h-[48vh] bg-neutral-100 sm:h-[65vh]" />
-        <div className="page py-12">
+      <div className="page animate-pulse py-10 sm:py-14" aria-label="Loading property">
+        <div className="h-4 w-32 bg-neutral-100" />
+        <div className="mt-6 aspect-[4/3] bg-neutral-100 md:aspect-auto md:h-[28rem] lg:h-[34rem]" />
+        <div className="py-12">
           <div className="h-12 w-2/3 bg-neutral-100" />
           <div className="mt-4 h-5 w-1/3 bg-neutral-100" />
         </div>
@@ -82,39 +81,16 @@ export default function Listing() {
 
   return (
     <article>
-      {/* Photos */}
-      <div className="bg-ink">
-        {listingImages.length > 0 ? (
-          <Swiper
-            modules={[Navigation, Pagination, Keyboard]}
-            navigation
-            keyboard
-            pagination={{ type: "fraction" }}
-            className="h-[48vh] sm:h-[65vh]"
-          >
-            {listingImages.map((url, index) => (
-              <SwiperSlide key={url || index}>
-                <img
-                  src={url}
-                  alt={`${listing.name}, photo ${index + 1}`}
-                  className="h-full w-full object-cover"
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        ) : (
-          <div className="flex h-[40vh] items-center justify-center text-sm uppercase tracking-label text-neutral-500">
-            No photos available
-          </div>
-        )}
-      </div>
-
       <div className="page py-10 sm:py-14">
         <Link to="/search" className="btn-link text-neutral-500">
           <FiArrowLeft /> All properties
         </Link>
 
-        <div className="mt-8 grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-16">
+        <div className="mt-6">
+          <PhotoGallery images={listingImages} title={listing.name} />
+        </div>
+
+        <div className="mt-10 grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-16">
           {/* Details */}
           <div>
             <div className="flex flex-wrap gap-2">
