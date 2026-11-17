@@ -108,13 +108,13 @@ function Hero({ slides }) {
             type="text"
             placeholder="Search by property name"
             aria-label="Search by property name"
-            className="h-14 border-0 bg-white px-5 text-sm text-ink placeholder:text-neutral-400 focus:outline-none"
+            className="h-14 border-0 bg-white px-5 text-base text-ink lg:text-sm placeholder:text-neutral-400 focus:outline-none"
             value={search.searchTerm}
             onChange={(e) => setSearch({ ...search, searchTerm: e.target.value })}
           />
           <select
             aria-label="Listing type"
-            className="h-14 border-0 bg-white px-5 text-sm text-ink focus:outline-none"
+            className="h-14 border-0 bg-white px-5 text-base text-ink lg:text-sm focus:outline-none"
             value={search.type}
             onChange={(e) => setSearch({ ...search, type: e.target.value })}
           >
@@ -136,7 +136,7 @@ function Hero({ slides }) {
             <Link
               key={current.id}
               to={`/listing/${current.id}`}
-              className="animate-rise inline-flex w-fit items-center gap-2 text-xs uppercase tracking-label text-neutral-300 hover:text-white"
+              className="animate-rise -my-3 inline-flex w-fit items-center gap-2 py-3 text-xs uppercase tracking-label text-neutral-300 hover:text-white"
             >
               Featured: {current.name} <FiArrowUpRight />
             </Link>
@@ -150,7 +150,7 @@ function Hero({ slides }) {
                     aria-selected={index === active}
                     aria-label={`Show ${slide.name}`}
                     onClick={() => setActive(index)}
-                    className="h-6 w-10 py-2.5"
+                    className="flex h-10 w-10 items-center"
                   >
                     <span className="block h-px w-full overflow-hidden bg-white/30">
                       {index === active && (

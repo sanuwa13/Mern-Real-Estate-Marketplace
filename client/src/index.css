@@ -43,7 +43,7 @@
   }
 
   .btn-link {
-    @apply inline-flex items-center gap-2 text-xs font-medium uppercase tracking-label text-ink underline-offset-4 hover:underline;
+    @apply -my-3 inline-flex items-center gap-2 py-3 text-xs font-medium uppercase tracking-label text-ink underline-offset-4 hover:underline;
   }
 
   .label {
@@ -51,7 +51,7 @@
   }
 
   .input {
-    @apply h-12 w-full border border-neutral-300 bg-white px-4 text-sm text-ink placeholder:text-neutral-400 transition-colors focus:border-ink focus:outline-none read-only:bg-neutral-50 read-only:text-neutral-500;
+    @apply h-12 w-full border border-neutral-300 bg-white px-4 text-base text-ink lg:text-sm placeholder:text-neutral-400 transition-colors focus:border-ink focus:outline-none read-only:bg-neutral-50 read-only:text-neutral-500;
   }
 
   .textarea {

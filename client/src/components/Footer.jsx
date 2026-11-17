@@ -66,13 +66,13 @@ export default function Footer() {
           {/* only the owner can sign in, so this stays small and out of the way */}
           <div className="flex gap-6">
             {currentUser && (
-              <Link to="/create-listing" className="transition-colors hover:text-white">
+              <Link to="/create-listing" className="inline-block py-2 transition-colors hover:text-white">
                 List a property
               </Link>
             )}
             <Link
               to={currentUser ? "/profile" : "/sign-in"}
-              className="transition-colors hover:text-white"
+              className="inline-block py-2 transition-colors hover:text-white"
             >
               {currentUser ? "Owner dashboard" : "Owner login"}
             </Link>

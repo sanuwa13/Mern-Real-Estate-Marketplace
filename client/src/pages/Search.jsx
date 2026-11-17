@@ -168,7 +168,7 @@ export default function Search() {
               <legend className="label">Features</legend>
               <div className="flex flex-col gap-3">
                 {FEATURE_OPTIONS.map((option) => (
-                  <label key={option.id} className="flex cursor-pointer items-center gap-3 text-sm">
+                  <label key={option.id} className="flex cursor-pointer items-center gap-3 py-2 text-sm">
                     <input
                       type="checkbox"
                       id={option.id}

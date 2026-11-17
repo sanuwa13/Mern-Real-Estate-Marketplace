@@ -139,7 +139,7 @@ export default function ListingForm({
             <legend className="label">Features</legend>
             <div className="flex flex-wrap gap-x-8 gap-y-3">
               {FEATURES.map((feature) => (
-                <label key={feature.id} className="flex cursor-pointer items-center gap-3 text-sm">
+                <label key={feature.id} className="flex cursor-pointer items-center gap-3 py-2 text-sm">
                   <input
                     type="checkbox"
                     id={feature.id}

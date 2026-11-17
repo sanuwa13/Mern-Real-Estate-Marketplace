@@ -113,7 +113,7 @@ export default function Header() {
             <img
               src={currentUser.avatar || DEFAULT_AVATAR}
               alt=""
-              className="h-9 w-9 object-cover grayscale"
+              className="h-10 w-10 object-cover grayscale"
             />
           </Link>
         )}

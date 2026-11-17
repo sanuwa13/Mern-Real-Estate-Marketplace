@@ -237,13 +237,13 @@ export default function Profile() {
                     {listing.offer && " · Offer"}
                   </p>
                 </div>
-                <div className="flex shrink-0 flex-col items-end gap-2 sm:flex-row sm:gap-6">
-                  <Link to={`/update-listing/${listing._id}`} className="btn-link">
+                <div className="flex shrink-0 flex-col items-end sm:flex-row sm:items-center sm:gap-6">
+                  <Link to={`/update-listing/${listing._id}`} className="btn-link !my-0">
                     Edit
                   </Link>
                   <button
                     onClick={() => handleListingDelete(listing)}
-                    className="btn-link text-neutral-500 hover:text-red-700"
+                    className="btn-link !my-0 text-neutral-500 hover:text-red-700"
                   >
                     Delete
                   </button>
