@@ -169,7 +169,7 @@ export default function Profile() {
         <div className="page flex flex-col gap-6 py-12 sm:flex-row sm:items-end sm:justify-between sm:py-16">
           <div>
             <p className="eyebrow">Owner dashboard</p>
-            <h1 className="heading mt-3 text-5xl sm:text-6xl">
+            <h1 className="heading mt-3 text-4xl sm:text-5xl">
               Hello, {currentUser?.username}.
             </h1>
           </div>
@@ -188,7 +188,7 @@ export default function Profile() {
         {/* Listings */}
         <section>
           <div className="flex items-baseline justify-between border-b border-ink pb-4">
-            <h2 className="heading text-3xl">Listings</h2>
+            <h2 className="heading text-2xl">Listings</h2>
             {!listingsLoading && (
               <p className="text-sm text-neutral-500">{userListings.length} total</p>
             )}
@@ -204,7 +204,7 @@ export default function Profile() {
 
           {!listingsLoading && userListings.length === 0 && !showListingsError && (
             <div className="py-16 text-center">
-              <p className="heading text-2xl">No listings yet.</p>
+              <p className="heading text-xl">No listings yet.</p>
               <Link to="/create-listing" className="btn-secondary mt-6">
                 Create your first listing
               </Link>
@@ -256,7 +256,7 @@ export default function Profile() {
         {/* Account */}
         <aside className="lg:sticky lg:top-28 lg:self-start">
           <form onSubmit={handleSubmit} className="flex flex-col gap-6 border border-neutral-200 p-6 sm:p-8">
-            <h2 className="heading text-3xl">Account</h2>
+            <h2 className="heading text-2xl">Account</h2>
 
             <div className="flex items-center gap-4">
               <input

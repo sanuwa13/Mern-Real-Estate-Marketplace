@@ -11,7 +11,7 @@ export default {
       },
       fontFamily: {
         sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
-        serif: ["'Instrument Serif'", "ui-serif", "Georgia", "serif"],
+        display: ["Montserrat", "ui-sans-serif", "system-ui", "sans-serif"],
       },
       letterSpacing: {
         label: "0.14em",

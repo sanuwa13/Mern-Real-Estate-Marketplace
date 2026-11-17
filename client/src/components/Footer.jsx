@@ -17,7 +17,7 @@ export default function Footer() {
     <footer className="bg-ink text-white">
       <div className="page grid grid-cols-1 gap-12 py-16 md:grid-cols-12">
         <div className="md:col-span-5">
-          <Logo inverted />
+          <Logo inverted className="h-16 sm:h-20" />
           <p className="mt-6 max-w-sm text-sm leading-relaxed text-neutral-400">
             Houses, apartments and land across Sri Lanka, presented honestly
             and sold with care.

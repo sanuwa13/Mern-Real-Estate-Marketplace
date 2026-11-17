@@ -27,7 +27,7 @@
   }
 
   .heading {
-    @apply font-serif font-normal leading-[1.05] text-ink;
+    @apply font-display font-semibold leading-[1.1] tracking-tight text-ink;
   }
 
   .btn {

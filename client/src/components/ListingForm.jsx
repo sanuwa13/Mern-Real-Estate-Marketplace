@@ -14,8 +14,8 @@ function Section({ number, title, children }) {
   return (
     <section className="grid grid-cols-1 gap-6 border-t border-neutral-200 py-10 md:grid-cols-[14rem_minmax(0,1fr)] md:gap-12">
       <div>
-        <p className="font-serif text-lg text-neutral-400">{number}</p>
-        <h2 className="heading mt-1 text-2xl">{title}</h2>
+        <p className="font-display text-sm font-semibold text-neutral-400">{number}</p>
+        <h2 className="heading mt-1 text-xl">{title}</h2>
       </div>
       <div className="flex flex-col gap-6">{children}</div>
     </section>
@@ -49,7 +49,7 @@ export default function ListingForm({
         <FiArrowLeft /> Dashboard
       </Link>
       <p className="eyebrow mt-10">{eyebrow}</p>
-      <h1 className="heading mt-3 text-5xl sm:text-6xl">{title}</h1>
+      <h1 className="heading mt-3 text-4xl sm:text-5xl">{title}</h1>
 
       <form onSubmit={onSubmit} className="mt-12">
         <Section number="01" title="Details">

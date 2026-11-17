@@ -116,13 +116,13 @@ export default function Header() {
                 <Link
                   key={link.label}
                   to={link.to}
-                  className="border-b border-neutral-100 py-4 font-serif text-2xl"
+                  className="border-b border-neutral-100 py-4 font-display text-xl font-semibold"
                 >
                   {link.label}
                 </Link>
               ))}
               {currentUser && (
-                <Link to="/profile" className="py-4 font-serif text-2xl">
+                <Link to="/profile" className="py-4 font-display text-xl font-semibold">
                   Dashboard
                 </Link>
               )}

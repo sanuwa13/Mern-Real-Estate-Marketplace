@@ -36,7 +36,7 @@ function ListingSection({ eyebrow, title, to, listings, loading }) {
       <div className="flex flex-wrap items-end justify-between gap-4 border-b border-neutral-200 pb-6">
         <div>
           <p className="eyebrow">{eyebrow}</p>
-          <h2 className="heading mt-3 text-4xl sm:text-5xl">{title}</h2>
+          <h2 className="heading mt-3 text-3xl sm:text-4xl">{title}</h2>
         </div>
         <Link to={to} className="btn-link">
           View all <FiArrowRight />
@@ -107,8 +107,8 @@ export default function Home() {
           <p className="eyebrow text-neutral-300">
             Real estate across Sri Lanka
           </p>
-          <h1 className="heading mt-5 max-w-4xl text-5xl text-white sm:text-7xl lg:text-8xl">
-            Find a place worth <em>calling home.</em>
+          <h1 className="heading mt-5 max-w-4xl text-4xl text-white sm:text-6xl lg:text-7xl">
+            Find a place worth <span className="text-neutral-300">calling home.</span>
           </h1>
           <p className="mt-6 max-w-xl text-base leading-relaxed text-neutral-300">
             Houses, apartments and land, carefully listed with clear prices and
@@ -165,7 +165,7 @@ export default function Home() {
               className="group flex items-start justify-between gap-6 py-10 md:px-8 md:first:pl-0 md:last:pr-0"
             >
               <div>
-                <h2 className="heading text-3xl">{category.label}</h2>
+                <h2 className="heading text-2xl">{category.label}</h2>
                 <p className="mt-3 max-w-xs text-sm leading-relaxed text-neutral-500">
                   {category.text}
                 </p>
@@ -205,7 +205,7 @@ export default function Home() {
         <div className="page grid grid-cols-1 gap-10 py-20 md:grid-cols-2 md:items-end">
           <div>
             <p className="eyebrow">Selling or renting out?</p>
-            <h2 className="heading mt-4 text-4xl sm:text-5xl">
+            <h2 className="heading mt-4 text-3xl sm:text-4xl">
               Let us present your property the way it deserves.
             </h2>
           </div>

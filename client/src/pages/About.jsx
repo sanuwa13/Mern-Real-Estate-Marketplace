@@ -21,7 +21,7 @@ export default function About() {
       <section className="border-b border-neutral-200">
         <div className="page py-16 sm:py-24">
           <p className="eyebrow">About us</p>
-          <h1 className="heading mt-4 max-w-4xl text-5xl sm:text-7xl">
+          <h1 className="heading mt-4 max-w-4xl text-4xl sm:text-6xl">
             A trusted name in Sri Lankan real estate.
           </h1>
         </div>
@@ -62,8 +62,8 @@ export default function About() {
         <div className="page grid grid-cols-1 divide-y divide-neutral-200 md:grid-cols-3 md:divide-x md:divide-y-0">
           {PRINCIPLES.map((principle, index) => (
             <div key={principle.title} className="py-12 md:px-8 md:first:pl-0 md:last:pr-0">
-              <p className="font-serif text-xl text-neutral-400">0{index + 1}</p>
-              <h2 className="heading mt-6 text-3xl">{principle.title}</h2>
+              <p className="font-display text-sm font-semibold text-neutral-400">0{index + 1}</p>
+              <h2 className="heading mt-6 text-2xl">{principle.title}</h2>
               <p className="mt-3 text-sm leading-relaxed text-neutral-600">{principle.text}</p>
             </div>
           ))}
@@ -71,7 +71,7 @@ export default function About() {
       </section>
 
       <section className="page flex flex-col items-start gap-8 py-20 sm:flex-row sm:items-end sm:justify-between">
-        <h2 className="heading max-w-xl text-4xl sm:text-5xl">Ready to find your next property?</h2>
+        <h2 className="heading max-w-xl text-3xl sm:text-4xl">Ready to find your next property?</h2>
         <Link to="/search" className="btn-primary">
           Browse properties
         </Link>

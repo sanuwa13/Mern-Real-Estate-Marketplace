@@ -59,7 +59,7 @@ export default function Listing() {
     return (
       <section className="page py-32">
         <p className="eyebrow">Unavailable</p>
-        <h1 className="heading mt-4 text-5xl">This property could not be found.</h1>
+        <h1 className="heading mt-4 text-4xl">This property could not be found.</h1>
         <p className="mt-6 max-w-md text-neutral-600">
           It may have been sold, rented or removed by the owner.
         </p>
@@ -128,7 +128,7 @@ export default function Listing() {
               )}
             </div>
 
-            <h1 className="heading mt-6 text-4xl sm:text-6xl">{listing.name}</h1>
+            <h1 className="heading mt-6 text-3xl sm:text-5xl">{listing.name}</h1>
             <p className="mt-4 flex items-start gap-2 text-neutral-600">
               <FiMapPin className="mt-1 shrink-0" />
               {listing.address}
@@ -139,7 +139,7 @@ export default function Listing() {
               {facts.map((fact) => (
                 <div key={fact.label} className="bg-white py-6 pr-4 sm:px-6 sm:first:pl-0">
                   <dt className="eyebrow">{fact.label}</dt>
-                  <dd className="mt-2 font-serif text-3xl">{fact.value}</dd>
+                  <dd className="mt-2 font-display text-2xl font-semibold">{fact.value}</dd>
                 </div>
               ))}
             </dl>
@@ -156,7 +156,7 @@ export default function Listing() {
           <aside className="lg:sticky lg:top-28 lg:self-start">
             <div className="border border-neutral-200 p-6 sm:p-8">
               <p className="eyebrow">{listing.type === "rent" ? "Monthly rent" : "Asking price"}</p>
-              <p className="mt-3 font-serif text-4xl leading-none">
+              <p className="mt-3 font-display text-3xl font-semibold leading-none">
                 {formatPrice(price)}
                 {listing.type === "rent" && (
                   <span className="font-sans text-base text-neutral-500"> / month</span>

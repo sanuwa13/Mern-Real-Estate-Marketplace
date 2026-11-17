@@ -56,7 +56,7 @@ export default function SignIn() {
     <div className="grid grid-cols-1 min-h-[calc(100vh-5rem)] lg:grid-cols-2">
       <div className="hidden flex-col justify-end bg-ink p-12 text-white lg:flex">
         <p className="eyebrow text-neutral-500">Owner area</p>
-        <p className="heading mt-4 max-w-md text-5xl text-white">
+        <p className="heading mt-4 max-w-md text-4xl text-white">
           Manage your listings in one place.
         </p>
       </div>
@@ -64,7 +64,7 @@ export default function SignIn() {
       <div className="flex items-center justify-center px-4 py-16 sm:px-6">
         <div className="w-full max-w-sm">
           <p className="eyebrow">Owner sign in</p>
-          <h1 className="heading mt-3 text-5xl">Welcome back.</h1>
+          <h1 className="heading mt-3 text-4xl">Welcome back.</h1>
           <p className="mt-3 text-sm text-neutral-500">
             This area is for the site owner only.
           </p>

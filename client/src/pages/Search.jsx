@@ -119,7 +119,7 @@ export default function Search() {
       <section className="border-b border-neutral-200">
         <div className="page py-12 sm:py-16">
           <p className="eyebrow">Search</p>
-          <h1 className="heading mt-3 text-5xl sm:text-6xl">{pageTitle(filtersFromUrl(location.search))}</h1>
+          <h1 className="heading mt-3 text-4xl sm:text-5xl">{pageTitle(filtersFromUrl(location.search))}</h1>
         </div>
       </section>
 
@@ -212,7 +212,7 @@ export default function Search() {
 
           {!loading && listings.length === 0 && (
             <div className="py-24 text-center">
-              <h2 className="heading text-3xl">No properties match these filters.</h2>
+              <h2 className="heading text-2xl">No properties match these filters.</h2>
               <p className="mt-3 text-sm text-neutral-500">
                 Try removing a filter or searching for a different keyword.
               </p>

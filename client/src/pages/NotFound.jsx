@@ -4,7 +4,7 @@ export default function NotFound() {
   return (
     <section className="page flex flex-col items-start py-32">
       <p className="eyebrow">Error 404</p>
-      <h1 className="heading mt-4 text-5xl sm:text-6xl">This page doesn’t exist.</h1>
+      <h1 className="heading mt-4 text-4xl sm:text-5xl">This page doesn’t exist.</h1>
       <p className="mt-6 max-w-md text-neutral-600">
         The address may be mistyped, or the property may no longer be listed.
       </p>
