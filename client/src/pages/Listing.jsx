@@ -1,17 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
+import { Navigation, Pagination, Keyboard } from "swiper/modules";
 import "swiper/css/bundle";
-import {
-  FaMapMarkerAlt,
-  FaShare,
-  FaBed,
-  FaBath,
-  FaParking,
-  FaChair,
-  FaPhone,
-} from "react-icons/fa";
+import { FiArrowLeft, FiCheck, FiLink, FiMapPin, FiPhone } from "react-icons/fi";
+import { formatPrice, plural } from "../utils/format";
 
 export default function Listing() {
   const [listing, setListing] = useState(null);
@@ -20,7 +13,6 @@ export default function Listing() {
   const [copied, setCopied] = useState(false);
   const [showPhone, setShowPhone] = useState(false);
   const params = useParams();
-
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -37,7 +29,7 @@ export default function Listing() {
         setListing(data);
         setLoading(false);
         setError(false);
-      } catch (error) {
+      } catch {
         setError(true);
         setLoading(false);
       }
@@ -45,152 +37,172 @@ export default function Listing() {
     fetchListing();
   }, [params.listingId]);
 
-  const listingImages = listing?.imageUrls || listing?.imagesUrls || [];
+  const copyLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
-  // Price & savings calculations
-  const regularPrice = Number(listing?.regularPrice || 0);
-  const discountPrice = Number(
-    listing?.discountPrice ?? listing?.discountedPrice ?? 0
-  );
+  if (loading) {
+    return (
+      <div className="animate-pulse" aria-label="Loading property">
+        <div className="h-[48vh] bg-neutral-100 sm:h-[65vh]" />
+        <div className="page py-12">
+          <div className="h-12 w-2/3 bg-neutral-100" />
+          <div className="mt-4 h-5 w-1/3 bg-neutral-100" />
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !listing) {
+    return (
+      <section className="page py-32">
+        <p className="eyebrow">Unavailable</p>
+        <h1 className="heading mt-4 text-5xl">This property could not be found.</h1>
+        <p className="mt-6 max-w-md text-neutral-600">
+          It may have been sold, rented or removed by the owner.
+        </p>
+        <Link to="/search" className="btn-primary mt-10">
+          Browse properties
+        </Link>
+      </section>
+    );
+  }
+
+  const listingImages = listing.imageUrls || listing.imagesUrls || [];
+  const regularPrice = Number(listing.regularPrice || 0);
+  const discountPrice = Number(listing.discountPrice ?? listing.discountedPrice ?? 0);
   const discountSavings = regularPrice - discountPrice;
+  const price = listing.offer ? discountPrice : regularPrice;
+
+  const facts = [
+    { label: "Bedrooms", value: listing.bedrooms },
+    { label: "Bathrooms", value: listing.bathrooms },
+    { label: "Parking", value: listing.parking ? "Yes" : "No" },
+    { label: "Furnished", value: listing.furnished ? "Yes" : "No" },
+  ];
 
   return (
-    <main>
-      {loading && <p className="text-center my-7 text-2xl">Loading...</p>}
-      {error && (
-        <p className="text-center my-7 text-2xl text-red-700">
-          Something went wrong!
-        </p>
-      )}
-
-      {listing && !loading && !error && (
-        <div>
-          {/* Swiper Image Slider */}
-          <Swiper modules={[Navigation]} navigation>
-            {listingImages.length > 0 ? (
-              listingImages.map((url, index) => (
-                <SwiperSlide key={url || index}>
-                  <img
-                    src={url}
-                    alt={listing.name}
-                    className="h-[550px] w-full object-cover"
-                  />
-                </SwiperSlide>
-              ))
-            ) : (
-              <SwiperSlide>
-                <div className="h-[550px] w-full flex items-center justify-center bg-gray-200 text-gray-500">
-                  No images available
-                </div>
+    <article>
+      {/* Photos */}
+      <div className="bg-ink">
+        {listingImages.length > 0 ? (
+          <Swiper
+            modules={[Navigation, Pagination, Keyboard]}
+            navigation
+            keyboard
+            pagination={{ type: "fraction" }}
+            className="h-[48vh] sm:h-[65vh]"
+          >
+            {listingImages.map((url, index) => (
+              <SwiperSlide key={url || index}>
+                <img
+                  src={url}
+                  alt={`${listing.name}, photo ${index + 1}`}
+                  className="h-full w-full object-cover"
+                />
               </SwiperSlide>
-            )}
+            ))}
           </Swiper>
-
-          {/* Share Button */}
-          <div className="fixed top-[13%] right-[3%] z-10 border rounded-full w-12 h-12 flex justify-center items-center bg-slate-100 cursor-pointer">
-            <FaShare
-              className="text-slate-500"
-              onClick={() => {
-                navigator.clipboard.writeText(window.location.href);
-                setCopied(true);
-                setTimeout(() => {
-                  setCopied(false);
-                }, 2000);
-              }}
-            />
+        ) : (
+          <div className="flex h-[40vh] items-center justify-center text-sm uppercase tracking-label text-neutral-500">
+            No photos available
           </div>
-          {copied && (
-            <p className="fixed top-[23%] right-[5%] z-10 rounded-md bg-slate-100 p-2 text-sm">
-              Link copied!
-            </p>
-          )}
+        )}
+      </div>
 
-          {/* Listing Details */}
-          <div className="flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4">
-            {/* Title & Top Price */}
-            <p className="text-2xl font-semibold">
-              {listing.name} - Rs.{""}
-              {listing.offer
-                ? discountPrice.toLocaleString("en-US")
-                : regularPrice.toLocaleString("en-US")}
-              {listing.type === "rent" && " / month"}
-            </p>
+      <div className="page py-10 sm:py-14">
+        <Link to="/search" className="btn-link text-neutral-500">
+          <FiArrowLeft /> All properties
+        </Link>
 
-            {/* Address */}
-            <p className="flex items-center gap-2 text-slate-600 text-sm">
-              <FaMapMarkerAlt className="text-green-700" />
-              {listing.address}
-            </p>
-
-            {/* Badges */}
-            <div className="flex gap-4">
-              <p className="bg-red-900 w-full max-w-[200px] text-white text-center p-1 rounded-md">
-                {listing.type === "rent" ? "For Rent" : "For Sale"}
-              </p>
-
-              {/* Green Savings Badge */}
+        <div className="mt-8 grid gap-12 lg:grid-cols-[1fr_22rem] lg:gap-16">
+          {/* Details */}
+          <div>
+            <div className="flex flex-wrap gap-2">
+              <span className="border border-ink px-3 py-1 text-[10px] font-medium uppercase tracking-label">
+                {listing.type === "rent" ? "For rent" : "For sale"}
+              </span>
               {listing.offer && (
-                <p className="bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md">
-                  Rs. {discountSavings.toLocaleString("en-US")} OFF
-                </p>
+                <span className="bg-ink px-3 py-1 text-[10px] font-medium uppercase tracking-label text-white">
+                  Offer
+                </span>
               )}
             </div>
 
-            {/* Description */}
-            <p className="text-slate-800">
-              <span className="font-semibold text-black">
-                Description -{" "}
-              </span>
-              {listing.description}
+            <h1 className="heading mt-6 text-4xl sm:text-6xl">{listing.name}</h1>
+            <p className="mt-4 flex items-start gap-2 text-neutral-600">
+              <FiMapPin className="mt-1 shrink-0" />
+              {listing.address}
             </p>
 
-            {/* Listing Details List */}
-            <ul className="text-green-900 font-semibold text-sm flex flex-wrap items-center gap-4 sm:gap-6">
-              <li className="flex items-center gap-1 whitespace-nowrap">
-                <FaBed className="text-lg" />
-                {listing.bedrooms > 1
-                  ? `${listing.bedrooms} Beds`
-                  : "1 Bed"}
-              </li>
-              <li className="flex items-center gap-1 whitespace-nowrap">
-                <FaBath className="text-lg" />
-                {listing.bathrooms > 1
-                  ? `${listing.bathrooms} Baths`
-                  : "1 Bath"}
-              </li>
-              <li className="flex items-center gap-1 whitespace-nowrap">
-                <FaParking className="text-lg" />
-                {listing.parking ? "Parking Available" : "No Parking"}
-              </li>
-              <li className="flex items-center gap-1 whitespace-nowrap">
-                <FaChair className="text-lg" />
-                {listing.furnished ? "Furnished" : "Not Furnished"}
-              </li>
-            </ul>
+            {/* hairline grid: the 1px gaps show the background colour as dividers */}
+            <dl className="mt-10 grid grid-cols-2 gap-px border-y border-neutral-200 bg-neutral-200 sm:grid-cols-4">
+              {facts.map((fact) => (
+                <div key={fact.label} className="bg-white py-6 pr-4 sm:px-6 sm:first:pl-0">
+                  <dt className="eyebrow">{fact.label}</dt>
+                  <dd className="mt-2 font-serif text-3xl">{fact.value}</dd>
+                </div>
+              ))}
+            </dl>
 
-            {/* Call Owner button, visible to every visitor */}
-            {listing.phone && (
-              <div className="mt-3">
-                {!showPhone ? (
-                  <button
-                    onClick={() => setShowPhone(true)}
-                    className="bg-green-700 text-white rounded-lg uppercase hover:opacity-95 p-3 font-semibold w-full"
-                  >
-                    Show Phone Number
-                  </button>
-                ) : (
-                  <a
-                    href={`tel:${listing.phone}`}
-                    className="bg-green-800 text-white text-center rounded-lg p-3 font-semibold flex items-center justify-center gap-2 hover:opacity-95 text-lg"
-                  >
-                    <FaPhone /> Call Owner: {listing.phone}
-                  </a>
-                )}
-              </div>
-            )}
+            <section className="mt-12">
+              <h2 className="eyebrow">About this property</h2>
+              <p className="mt-4 max-w-2xl whitespace-pre-line text-base leading-relaxed text-neutral-700">
+                {listing.description}
+              </p>
+            </section>
           </div>
+
+          {/* Price and contact */}
+          <aside className="lg:sticky lg:top-28 lg:self-start">
+            <div className="border border-neutral-200 p-6 sm:p-8">
+              <p className="eyebrow">{listing.type === "rent" ? "Monthly rent" : "Asking price"}</p>
+              <p className="mt-3 font-serif text-4xl leading-none">
+                {formatPrice(price)}
+                {listing.type === "rent" && (
+                  <span className="font-sans text-base text-neutral-500"> / month</span>
+                )}
+              </p>
+              {listing.offer && discountSavings > 0 && (
+                <p className="mt-3 text-sm text-neutral-500">
+                  <span className="line-through">{formatPrice(regularPrice)}</span>
+                  <span className="ml-2 text-ink">Save {formatPrice(discountSavings)}</span>
+                </p>
+              )}
+
+              <p className="mt-6 border-t border-neutral-200 pt-6 text-sm text-neutral-600">
+                {plural(listing.bedrooms, "bedroom")} · {plural(listing.bathrooms, "bathroom")}
+              </p>
+
+              <div className="mt-6 flex flex-col gap-3">
+                {listing.phone &&
+                  (showPhone ? (
+                    <a href={`tel:${listing.phone}`} className="btn-primary w-full">
+                      <FiPhone /> {listing.phone}
+                    </a>
+                  ) : (
+                    <button onClick={() => setShowPhone(true)} className="btn-primary w-full">
+                      <FiPhone /> Show phone number
+                    </button>
+                  ))}
+                <button onClick={copyLink} className="btn-secondary w-full">
+                  {copied ? (
+                    <>
+                      <FiCheck /> Link copied
+                    </>
+                  ) : (
+                    <>
+                      <FiLink /> Copy link
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </aside>
         </div>
-      )}
-    </main>
+      </div>
+    </article>
   );
 }
