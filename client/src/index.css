@@ -2,6 +2,79 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
-    background-color: rgb(241, 245, 241);
+@layer base {
+  body {
+    @apply bg-white font-sans text-ink antialiased;
+  }
+
+  ::selection {
+    @apply bg-ink text-white;
+  }
+
+  :focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-ink;
+  }
+}
+
+/* shared building blocks so every page uses the same buttons, fields and labels */
+@layer components {
+  .page {
+    @apply mx-auto w-full max-w-page px-4 sm:px-6 lg:px-8;
+  }
+
+  .eyebrow {
+    @apply text-[11px] font-medium uppercase tracking-label text-neutral-500;
+  }
+
+  .heading {
+    @apply font-serif font-normal leading-[1.05] tracking-tight text-ink;
+  }
+
+  .btn {
+    @apply inline-flex h-12 items-center justify-center gap-2 px-6 text-xs font-medium uppercase tracking-label transition-colors disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn bg-ink text-white hover:bg-neutral-800;
+  }
+
+  .btn-secondary {
+    @apply btn border border-ink bg-white text-ink hover:bg-ink hover:text-white;
+  }
+
+  .btn-link {
+    @apply inline-flex items-center gap-2 text-xs font-medium uppercase tracking-label text-ink underline-offset-4 hover:underline;
+  }
+
+  .label {
+    @apply mb-2 block text-[11px] font-medium uppercase tracking-label text-neutral-600;
+  }
+
+  .input {
+    @apply h-12 w-full border border-neutral-300 bg-white px-4 text-sm text-ink placeholder:text-neutral-400 transition-colors focus:border-ink focus:outline-none read-only:bg-neutral-50 read-only:text-neutral-500;
+  }
+
+  .textarea {
+    @apply input h-auto min-h-[8rem] py-3 leading-relaxed;
+  }
+
+  .checkbox {
+    @apply h-4 w-4 cursor-pointer appearance-none border border-neutral-400 bg-white bg-center bg-no-repeat checked:border-ink checked:bg-ink;
+  }
+
+  .checkbox:checked {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E");
+  }
+
+  .error-text {
+    @apply text-sm text-red-700;
+  }
+}
+
+/* listing photo slider: monochrome controls */
+.swiper {
+  --swiper-navigation-color: #fff;
+  --swiper-navigation-size: 22px;
+  --swiper-pagination-color: #fff;
+  --swiper-pagination-fraction-color: #fff;
 }
