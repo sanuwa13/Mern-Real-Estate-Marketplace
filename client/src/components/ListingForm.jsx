@@ -97,7 +97,7 @@ export default function ListingForm({
                 inputMode="tel"
                 id="phone"
                 className="input"
-                placeholder="0771234567"
+                placeholder="0768574917"
                 required
                 onChange={onChange}
                 value={formData.phone || ""}

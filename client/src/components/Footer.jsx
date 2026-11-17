@@ -47,8 +47,8 @@ export default function Footer() {
           <address className="mt-5 space-y-3 text-sm not-italic text-neutral-300">
             <p>123 Main Street, Colombo, Sri Lanka</p>
             <p>
-              <a href="tel:+94771234567" className="transition-colors hover:text-white">
-                +94 77 123 4567
+              <a href="tel:+94768574917" className="transition-colors hover:text-white">
+                076 857 4917
               </a>
             </p>
             <p>

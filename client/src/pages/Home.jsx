@@ -404,8 +404,8 @@ export default function Home() {
             </h2>
           </Reveal>
           <Reveal delay={150} className="flex flex-wrap gap-3 md:justify-end">
-            <a href="tel:+94771234567" className="btn-primary">
-              Call +94 77 123 4567
+            <a href="tel:+94768574917" className="btn-primary">
+              Call 076 857 4917
             </a>
             <Link to="/about" className="btn-secondary">
               About us
