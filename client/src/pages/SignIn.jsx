@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { 
+import {
    signInStart,
-   signInSuccess, 
-   signInFailure, 
+   signInSuccess,
+   signInFailure,
   } from '../redux/user/userSlice';
 
 export default function SignIn() {
@@ -24,8 +24,8 @@ export default function SignIn() {
     e.preventDefault();
 
     if (!formData.email || !formData.password || formData.email.trim() === '' || formData.password.trim() === '') {
-      dispatch(signInFailure('please enter sign in credentials'));
-      return; 
+      dispatch(signInFailure('Please enter your email and password'));
+      return;
     }
 
     try {
@@ -37,48 +37,68 @@ export default function SignIn() {
         },
         body: JSON.stringify(formData),
       });
-      
+
       const data = await res.json();
-      
+
       if (data.success === false) {
         dispatch(signInFailure(data.message));
         return;
       }
-      
+
       dispatch(signInSuccess(data));
-      navigate('/');
+      navigate('/profile');
     } catch (error) {
       dispatch(signInFailure(error.message));
     }
   };
 
   return (
-    <div className='p-3 max-w-lg mx-auto'>
-      <h1 className='text-3xl text-center font-semibold my-7'>Owner Sign In</h1>
-      <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
-        <input 
-          type="email" 
-          placeholder='email'
-          className='border p-3 rounded-lg' 
-          id='email' 
-          onChange={handleChange}
-        />
-        <input 
-          type="password" 
-          placeholder='password'
-          className='border p-3 rounded-lg' 
-          id='password' 
-          onChange={handleChange}
-        />
-        <button 
-          disabled={loading} 
-          className='bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80'
-        >
-          {loading ? 'Loading...' : 'Sign in'} 
-        </button>
-      </form>
-      
-      {error && <p className='text-red-600 mt-5'>{error}</p>}
+    <div className="grid min-h-[calc(100vh-5rem)] lg:grid-cols-2">
+      <div className="hidden flex-col justify-end bg-ink p-12 text-white lg:flex">
+        <p className="eyebrow text-neutral-500">Owner area</p>
+        <p className="heading mt-4 max-w-md text-5xl text-white">
+          Manage your listings in one place.
+        </p>
+      </div>
+
+      <div className="flex items-center justify-center px-4 py-16 sm:px-6">
+        <div className="w-full max-w-sm">
+          <p className="eyebrow">Owner sign in</p>
+          <h1 className="heading mt-3 text-5xl">Welcome back.</h1>
+          <p className="mt-3 text-sm text-neutral-500">
+            This area is for the site owner only.
+          </p>
+
+          <form onSubmit={handleSubmit} className="mt-10 flex flex-col gap-6" noValidate>
+            <div>
+              <label htmlFor="email" className="label">Email</label>
+              <input
+                type="email"
+                id="email"
+                autoComplete="email"
+                className="input"
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="password" className="label">Password</label>
+              <input
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                className="input"
+                onChange={handleChange}
+              />
+            </div>
+
+            {error && <p className="error-text" role="alert">{error}</p>}
+
+            <button disabled={loading} className="btn-primary w-full">
+              {loading ? 'Signing in…' : 'Sign in'}
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
