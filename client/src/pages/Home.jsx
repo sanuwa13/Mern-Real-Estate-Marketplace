@@ -41,7 +41,7 @@ const CATEGORIES = [
   },
 ];
 
-const MARQUEE_WORDS = ["Houses", "Apartments", "Land", "Buy", "Rent", "Invest", "Sri Lanka"];
+const MARQUEE_WORDS = ["Houses", "Apartments", "Land", "Buy", "Sell", "Rent", "Invest"];
 
 const TABS = [
   { id: "offers", label: "Offers", to: "/search?offer=true" },
