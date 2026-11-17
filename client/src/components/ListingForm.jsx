@@ -12,7 +12,7 @@ const FEATURES = [
 
 function Section({ number, title, children }) {
   return (
-    <section className="grid gap-6 border-t border-neutral-200 py-10 md:grid-cols-[14rem_1fr] md:gap-12">
+    <section className="grid grid-cols-1 gap-6 border-t border-neutral-200 py-10 md:grid-cols-[14rem_minmax(0,1fr)] md:gap-12">
       <div>
         <p className="font-serif text-lg text-neutral-400">{number}</p>
         <h2 className="heading mt-1 text-2xl">{title}</h2>
@@ -78,7 +78,7 @@ export default function ListingForm({
               value={formData.description || ""}
             />
           </div>
-          <div className="grid gap-6 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div>
               <label htmlFor="address" className="label">Address</label>
               <input
@@ -153,7 +153,7 @@ export default function ListingForm({
             </div>
           </fieldset>
 
-          <div className="grid gap-6 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div>
               <label htmlFor="bedrooms" className="label">Bedrooms</label>
               <input
@@ -184,7 +184,7 @@ export default function ListingForm({
         </Section>
 
         <Section number="03" title="Price">
-          <div className="grid gap-6 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div>
               <label htmlFor="regularPrice" className="label">Regular price ({priceUnit})</label>
               <input

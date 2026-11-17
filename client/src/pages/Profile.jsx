@@ -184,7 +184,7 @@ export default function Profile() {
         </div>
       </section>
 
-      <div className="page grid gap-16 py-12 lg:grid-cols-[1fr_22rem]">
+      <div className="page grid grid-cols-1 gap-16 py-12 lg:grid-cols-[minmax(0,1fr)_22rem]">
         {/* Listings */}
         <section>
           <div className="flex items-baseline justify-between border-b border-ink pb-4">

@@ -123,7 +123,7 @@ export default function Search() {
         </div>
       </section>
 
-      <div className="page grid gap-12 py-12 lg:grid-cols-[18rem_1fr]">
+      <div className="page grid grid-cols-1 gap-12 py-12 lg:grid-cols-[18rem_minmax(0,1fr)]">
         <aside>
           <form onSubmit={handleSubmit} className="flex flex-col gap-8 lg:sticky lg:top-28">
             <div>
@@ -222,7 +222,7 @@ export default function Search() {
             </div>
           )}
 
-          <div className="mt-8 grid gap-x-6 gap-y-12 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 xl:grid-cols-3">
             {loading ? (
               <ListingGridSkeleton count={6} />
             ) : (

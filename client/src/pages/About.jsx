@@ -27,7 +27,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="page grid gap-12 py-16 sm:py-24 lg:grid-cols-12">
+      <section className="page grid grid-cols-1 gap-12 py-16 sm:py-24 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <p className="eyebrow">Who we are</p>
         </div>
@@ -59,7 +59,7 @@ export default function About() {
       </section>
 
       <section className="border-y border-neutral-200">
-        <div className="page grid divide-y divide-neutral-200 md:grid-cols-3 md:divide-x md:divide-y-0">
+        <div className="page grid grid-cols-1 divide-y divide-neutral-200 md:grid-cols-3 md:divide-x md:divide-y-0">
           {PRINCIPLES.map((principle, index) => (
             <div key={principle.title} className="py-12 md:px-8 md:first:pl-0 md:last:pr-0">
               <p className="font-serif text-xl text-neutral-400">0{index + 1}</p>

@@ -42,7 +42,7 @@ function ListingSection({ eyebrow, title, to, listings, loading }) {
           View all <FiArrowRight />
         </Link>
       </div>
-      <div className="mt-10 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
         {loading ? (
           <ListingGridSkeleton count={4} />
         ) : (
@@ -117,7 +117,7 @@ export default function Home() {
 
           <form
             onSubmit={handleSearch}
-            className="mt-10 grid max-w-3xl gap-px bg-neutral-700 sm:grid-cols-[1fr_auto_auto]"
+            className="mt-10 grid grid-cols-1 max-w-3xl gap-px bg-neutral-700 sm:grid-cols-[1fr_auto_auto]"
           >
             <input
               type="text"
@@ -157,7 +157,7 @@ export default function Home() {
 
       {/* Ways to browse */}
       <section className="border-b border-neutral-200">
-        <div className="page grid divide-y divide-neutral-200 md:grid-cols-3 md:divide-x md:divide-y-0">
+        <div className="page grid grid-cols-1 divide-y divide-neutral-200 md:grid-cols-3 md:divide-x md:divide-y-0">
           {CATEGORIES.map((category) => (
             <Link
               key={category.label}
@@ -202,7 +202,7 @@ export default function Home() {
 
       {/* Closing call to action */}
       <section className="bg-neutral-100">
-        <div className="page grid gap-10 py-20 md:grid-cols-2 md:items-end">
+        <div className="page grid grid-cols-1 gap-10 py-20 md:grid-cols-2 md:items-end">
           <div>
             <p className="eyebrow">Selling or renting out?</p>
             <h2 className="heading mt-4 text-4xl sm:text-5xl">

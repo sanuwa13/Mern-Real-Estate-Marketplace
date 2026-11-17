@@ -114,7 +114,7 @@ export default function Listing() {
           <FiArrowLeft /> All properties
         </Link>
 
-        <div className="mt-8 grid gap-12 lg:grid-cols-[1fr_22rem] lg:gap-16">
+        <div className="mt-8 grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-16">
           {/* Details */}
           <div>
             <div className="flex flex-wrap gap-2">

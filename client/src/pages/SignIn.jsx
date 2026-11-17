@@ -53,7 +53,7 @@ export default function SignIn() {
   };
 
   return (
-    <div className="grid min-h-[calc(100vh-5rem)] lg:grid-cols-2">
+    <div className="grid grid-cols-1 min-h-[calc(100vh-5rem)] lg:grid-cols-2">
       <div className="hidden flex-col justify-end bg-ink p-12 text-white lg:flex">
         <p className="eyebrow text-neutral-500">Owner area</p>
         <p className="heading mt-4 max-w-md text-5xl text-white">
