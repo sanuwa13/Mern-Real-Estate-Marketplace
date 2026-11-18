@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { formatPrice, listingPrices, plural } from "../utils/format";
+import { formatLocation } from "../utils/districts";
 
 const FALLBACK_IMAGE =
   "https://53.fs1.hubspotusercontent-na1.net/hub/53/hubfs/Sales_Blog/real-estate-business-compressor.png";
@@ -43,7 +44,7 @@ export default function ListingItem({ listing }) {
         <h3 className="mt-1 truncate text-sm text-ink group-hover:underline group-hover:underline-offset-4">
           {listing.name}
         </h3>
-        <p className="mt-1 truncate text-sm text-neutral-500">{listing.address}</p>
+        <p className="mt-1 truncate text-sm text-neutral-500">{formatLocation(listing)}</p>
         <p className="mt-3 border-t border-neutral-200 pt-3 text-xs uppercase tracking-label text-neutral-600">
           {plural(listing.bedrooms, "bed")}
           <span className="mx-2 text-neutral-300">/</span>

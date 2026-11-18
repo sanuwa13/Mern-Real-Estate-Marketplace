@@ -20,6 +20,7 @@ import { Link } from "react-router-dom";
 import { FiPlus } from "react-icons/fi";
 import { validateImage, deleteImage, deleteImages } from "../utils/images";
 import { formatPrice, listingPrices } from "../utils/format";
+import { formatLocation } from "../utils/districts";
 
 const DEFAULT_AVATAR =
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcPVY5FK0TbQhg_WSDUKRuOEWDHwfvaHFCjA&s";
@@ -231,7 +232,13 @@ export default function Profile() {
                   >
                     {listing.name}
                   </Link>
-                  <p className="mt-1 truncate text-sm text-neutral-500">{listing.address}</p>
+                  <p className="mt-1 truncate text-sm text-neutral-500">
+                    {listing.district ? (
+                      formatLocation(listing)
+                    ) : (
+                      <span className="text-red-700">No district yet. Edit to add one.</span>
+                    )}
+                  </p>
                   <p className="mt-2 text-xs uppercase tracking-label text-neutral-600">
                     {listing.type === "rent" ? "Rent" : "Sale"} · {formatPrice(listingPrices(listing).price)}
                     {listing.offer && " · Offer"}

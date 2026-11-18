@@ -8,6 +8,7 @@ import ListingItem from "../components/ListingItem";
 import ListingGridSkeleton from "../components/ListingGridSkeleton";
 import Reveal from "../components/Reveal";
 import CountUp from "../components/CountUp";
+import { DISTRICTS } from "../utils/districts";
 
 const SLIDE_MS = 7000;
 
@@ -53,7 +54,7 @@ const TABS = [
 function Hero({ slides }) {
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
-  const [search, setSearch] = useState({ searchTerm: "", type: "all" });
+  const [search, setSearch] = useState({ searchTerm: "", type: "all", district: "" });
 
   useEffect(() => {
     if (slides.length < 2 || prefersReducedMotion()) return;
@@ -64,6 +65,7 @@ function Hero({ slides }) {
   const handleSearch = (e) => {
     e.preventDefault();
     const params = new URLSearchParams({ searchTerm: search.searchTerm, type: search.type });
+    if (search.district) params.set("district", search.district);
     navigate(`/search?${params.toString()}`);
   };
 
@@ -101,7 +103,7 @@ function Hero({ slides }) {
 
         <form
           onSubmit={handleSearch}
-          className="animate-rise mt-10 grid max-w-3xl grid-cols-1 gap-px bg-neutral-700 sm:grid-cols-[1fr_auto_auto]"
+          className="animate-rise mt-10 grid max-w-4xl grid-cols-1 gap-px bg-neutral-700 sm:grid-cols-2 lg:grid-cols-[1fr_auto_auto_auto]"
           style={{ animationDelay: "400ms" }}
         >
           <input
@@ -122,7 +124,20 @@ function Hero({ slides }) {
             <option value="sale">Buy</option>
             <option value="rent">Rent</option>
           </select>
-          <button className="btn h-14 bg-white text-ink hover:bg-neutral-200 sm:border-l sm:border-neutral-200">
+          <select
+            aria-label="District"
+            className="h-14 border-0 bg-white px-5 text-base text-ink lg:text-sm focus:outline-none"
+            value={search.district}
+            onChange={(e) => setSearch({ ...search, district: e.target.value })}
+          >
+            <option value="">All of Sri Lanka</option>
+            {DISTRICTS.map((district) => (
+              <option key={district} value={district}>
+                {district}
+              </option>
+            ))}
+          </select>
+          <button className="btn h-14 bg-white text-ink hover:bg-neutral-200 lg:border-l lg:border-neutral-200">
             Search
           </button>
         </form>

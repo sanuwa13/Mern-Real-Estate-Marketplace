@@ -105,10 +105,17 @@ export default function Listing() {
             </div>
 
             <h1 className="heading mt-6 text-3xl sm:text-5xl">{listing.name}</h1>
-            <p className="mt-4 flex items-start gap-2 text-neutral-600">
+            <div className="mt-4 flex items-start gap-2 text-neutral-600">
               <FiMapPin className="mt-1 shrink-0" />
-              {listing.address}
-            </p>
+              <div>
+                {listing.district && (
+                  <p className="font-medium text-ink">
+                    {[listing.city, `${listing.district} District`].filter(Boolean).join(", ")}
+                  </p>
+                )}
+                <p>{listing.address}</p>
+              </div>
+            </div>
 
             {/* hairline grid: the 1px gaps show the background colour as dividers */}
             <dl className="mt-10 grid grid-cols-2 gap-px border-y border-neutral-200 bg-neutral-200 sm:grid-cols-4">
