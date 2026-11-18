@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import ListingItem from "../components/ListingItem";
 import ListingGridSkeleton from "../components/ListingGridSkeleton";
+import LocationFilter from "../components/LocationFilter";
 
 const PAGE_SIZE = 9;
 
@@ -27,14 +28,18 @@ const filtersFromUrl = (search) => {
     offer: urlParams.get("offer") === "true",
     sort: urlParams.get("sort") || "createdAt",
     order: urlParams.get("order") || "desc",
+    district: urlParams.get("district") || "",
+    city: urlParams.get("city") || "",
   };
 };
 
-const pageTitle = ({ type, offer }) => {
-  if (offer) return "Special offers";
-  if (type === "sale") return "Properties for sale";
-  if (type === "rent") return "Properties for rent";
-  return "All properties";
+const pageTitle = ({ type, offer, district, city }) => {
+  const place = city || district;
+  const where = place ? ` in ${place}` : "";
+  if (offer) return `Special offers${where}`;
+  if (type === "sale") return `Properties for sale${where}`;
+  if (type === "rent") return `Properties for rent${where}`;
+  return place ? `Properties in ${place}` : "All properties";
 };
 
 export default function Search() {
@@ -102,6 +107,19 @@ export default function Search() {
     urlParams.set("offer", sidebardata.offer);
     urlParams.set("sort", sidebardata.sort);
     urlParams.set("order", sidebardata.order);
+    if (sidebardata.district) urlParams.set("district", sidebardata.district);
+    if (sidebardata.city) urlParams.set("city", sidebardata.city);
+    navigate(`/search?${urlParams.toString()}`);
+  };
+
+  // like ikman, picking a location applies at once and keeps the other filters
+  const handleLocation = (district, city) => {
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.delete("startIndex");
+    if (district) urlParams.set("district", district);
+    else urlParams.delete("district");
+    if (city) urlParams.set("city", city);
+    else urlParams.delete("city");
     navigate(`/search?${urlParams.toString()}`);
   };
 
@@ -126,6 +144,12 @@ export default function Search() {
       <div className="page grid grid-cols-1 gap-12 py-12 lg:grid-cols-[18rem_minmax(0,1fr)]">
         <aside>
           <form onSubmit={handleSubmit} className="flex flex-col gap-8 lg:sticky lg:top-28">
+            <LocationFilter
+              district={sidebardata.district}
+              city={sidebardata.city}
+              onSelect={handleLocation}
+            />
+
             <div>
               <label htmlFor="searchTerm" className="label">
                 Keyword
