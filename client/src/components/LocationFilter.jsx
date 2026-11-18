@@ -71,7 +71,6 @@ export default function LocationFilter({ district, city, onSelect }) {
     setOpen((value) => !value);
   };
 
-  const total = (locations || []).reduce((sum, l) => sum + l.count, 0);
   const current = (locations || []).find((l) => l.district === browsing);
   const label = city ? `${city}, ${district}` : district || "All of Sri Lanka";
 
@@ -121,7 +120,6 @@ export default function LocationFilter({ district, city, onSelect }) {
                 <Row
                   selected={!district}
                   onClick={() => choose("", "")}
-                  count={total}
                 >
                   All of Sri Lanka
                 </Row>

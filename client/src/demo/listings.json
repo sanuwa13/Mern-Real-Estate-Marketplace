@@ -19,7 +19,9 @@
     ],
     "userRef": "6a3df1142fdd226bfb72250d",
     "createdAt": "2026-08-05T06:17:02.891Z",
-    "updatedAt": "2026-11-17T18:27:36.959Z"
+    "updatedAt": "2026-11-18T04:48:18.277Z",
+    "city": "Dehiwala",
+    "district": "Colombo"
   },
   {
     "_id": "6a72d4da70c6422b07d579e0",
@@ -41,7 +43,9 @@
     ],
     "userRef": "6a3df1142fdd226bfb72250d",
     "createdAt": "2026-08-05T06:14:50.290Z",
-    "updatedAt": "2026-11-17T18:27:36.959Z"
+    "updatedAt": "2026-11-18T04:48:20.022Z",
+    "city": "Yakkala",
+    "district": "Gampaha"
   },
   {
     "_id": "6a72d3f170c6422b07d579df",
@@ -62,7 +66,9 @@
     ],
     "userRef": "6a3df1142fdd226bfb72250d",
     "createdAt": "2026-08-05T06:10:57.502Z",
-    "updatedAt": "2026-11-17T18:27:36.959Z"
+    "updatedAt": "2026-11-18T04:48:20.129Z",
+    "city": "Colombo 05",
+    "district": "Colombo"
   },
   {
     "_id": "6a72d35a70c6422b07d579de",
@@ -84,7 +90,9 @@
     ],
     "userRef": "6a3df1142fdd226bfb72250d",
     "createdAt": "2026-08-05T06:08:26.776Z",
-    "updatedAt": "2026-11-17T18:27:36.959Z"
+    "updatedAt": "2026-11-18T04:48:20.331Z",
+    "city": "Dadalla",
+    "district": "Galle"
   },
   {
     "_id": "6a6c2ddbdce3f438b840791a",
@@ -106,7 +114,9 @@
     ],
     "userRef": "6a3df1142fdd226bfb72250d",
     "createdAt": "2026-07-31T05:08:43.620Z",
-    "updatedAt": "2026-11-17T18:27:36.959Z"
+    "updatedAt": "2026-11-18T04:48:20.521Z",
+    "city": "Dehiwala",
+    "district": "Colombo"
   },
   {
     "_id": "6a633690d7211de9bd10b461",
@@ -127,9 +137,11 @@
     ],
     "userRef": "6a3df1142fdd226bfb72250d",
     "createdAt": "2026-07-24T09:55:28.382Z",
-    "updatedAt": "2026-11-17T18:27:36.959Z",
+    "updatedAt": "2026-11-18T04:48:20.734Z",
     "discountPrice": 4980,
-    "phone": "0768574917"
+    "phone": "0768574917",
+    "city": "Colombo",
+    "district": "Colombo"
   },
   {
     "discountPrice": 0,
@@ -152,8 +164,10 @@
     ],
     "userRef": "6a3df1142fdd226bfb72250d",
     "createdAt": "2026-07-24T09:54:37.517Z",
-    "updatedAt": "2026-11-17T18:27:36.959Z",
-    "phone": "0768574917"
+    "updatedAt": "2026-11-18T04:48:20.857Z",
+    "phone": "0768574917",
+    "city": "Kandy",
+    "district": "Kandy"
   },
   {
     "discountPrice": 0,

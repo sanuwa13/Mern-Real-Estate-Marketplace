@@ -20,6 +20,8 @@ const getListings = (params) => {
   const startIndex = Math.max(parseInt(params.get("startIndex")) || 0, 0);
   const search = new RegExp(escapeRegex(params.get("searchTerm") || ""), "i");
   const type = params.get("type");
+  const district = params.get("district");
+  const city = (params.get("city") || "").trim().toLowerCase();
   const sort = SORT_FIELDS.includes(params.get("sort")) ? params.get("sort") : "createdAt";
   const direction = params.get("order") === "asc" ? 1 : -1;
 
@@ -28,6 +30,8 @@ const getListings = (params) => {
       (l) =>
         search.test(l.name) &&
         (!["rent", "sale"].includes(type) || l.type === type) &&
+        (!district || l.district === district) &&
+        (!city || (l.city || "").toLowerCase() === city) &&
         ["offer", "parking", "furnished"].every((f) => params.get(f) !== "true" || l[f]),
     )
     .sort((a, b) => {
@@ -52,6 +56,24 @@ const handle = (url, method) => {
     return listing
       ? json(listing)
       : json({ success: false, statusCode: 404, message: "Listing not found!" }, 404);
+  }
+  if (method === "GET" && path === "/api/listing/locations") {
+    const byDistrict = new Map();
+    for (const l of snapshot.filter((x) => x.district)) {
+      const entry = byDistrict.get(l.district) || { district: l.district, count: 0, cities: new Map() };
+      entry.count += 1;
+      if (l.city) entry.cities.set(l.city, (entry.cities.get(l.city) || 0) + 1);
+      byDistrict.set(l.district, entry);
+    }
+    return json(
+      [...byDistrict.values()]
+        .map((e) => ({
+          district: e.district,
+          count: e.count,
+          cities: [...e.cities].map(([c, count]) => ({ city: c, count })).sort((a, b) => a.city.localeCompare(b.city)),
+        }))
+        .sort((a, b) => a.district.localeCompare(b.district)),
+    );
   }
   if (method === "GET" && path === "/api/listing/stats") {
     return json({
