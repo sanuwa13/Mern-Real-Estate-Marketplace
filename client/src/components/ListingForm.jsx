@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { DISTRICTS, fetchLocations } from "../utils/districts";
 import { FiArrowLeft, FiUploadCloud, FiX } from "react-icons/fi";
 
 // Shared layout for the create and edit listing pages. Each page keeps its own state and save logic.
@@ -41,6 +43,14 @@ export default function ListingForm({
   onRemoveUploadedImage,
 }) {
   const imageUrls = formData.imageUrls || [];
+
+  // towns already used in the chosen district, offered as suggestions so spellings stay consistent
+  const [locations, setLocations] = useState([]);
+  useEffect(() => {
+    fetchLocations().then(setLocations).catch(() => setLocations([]));
+  }, []);
+  const townSuggestions =
+    locations.find((l) => l.district === formData.district)?.cities.map((c) => c.city) || [];
   const priceUnit = formData.type === "rent" ? "Rs. per month" : "Rs.";
 
   return (
@@ -80,7 +90,48 @@ export default function ListingForm({
           </div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div>
-              <label htmlFor="address" className="label">Address</label>
+              <label htmlFor="district" className="label">District</label>
+              <select
+                id="district"
+                className="input"
+                required
+                onChange={onChange}
+                value={formData.district || ""}
+              >
+                <option value="" disabled>
+                  Choose a district
+                </option>
+                {DISTRICTS.map((district) => (
+                  <option key={district} value={district}>
+                    {district}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="city" className="label">Town / area</label>
+              <input
+                type="text"
+                id="city"
+                className="input"
+                placeholder="e.g. Dehiwala, Nugegoda, Colombo 5"
+                list="town-suggestions"
+                maxLength="60"
+                autoComplete="off"
+                required
+                onChange={onChange}
+                value={formData.city || ""}
+              />
+              <datalist id="town-suggestions">
+                {townSuggestions.map((town) => (
+                  <option key={town} value={town} />
+                ))}
+              </datalist>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div>
+              <label htmlFor="address" className="label">Street address</label>
               <input
                 type="text"
                 id="address"

@@ -18,6 +18,8 @@ export default function CreateListing() {
     name: "",
     description: "",
     address: "",
+    district: "",
+    city: "",
     phone: "",
     type: "rent",
     bedrooms: 1,
@@ -129,7 +131,8 @@ export default function CreateListing() {
     if (
       e.target.type === "number" ||
       e.target.type === "text" ||
-      e.target.type === "textarea"
+      e.target.type === "textarea" ||
+      e.target.type === "select-one"
     ) {
       setFormData({
         ...formData,

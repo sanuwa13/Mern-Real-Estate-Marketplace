@@ -21,6 +21,8 @@ export default function UpdateListing() {
     name: "",
     description: "",
     address: "",
+    district: "",
+    city: "",
     phone: "",
     type: "rent",
     bedrooms: 1,
@@ -50,6 +52,8 @@ export default function UpdateListing() {
         setFormData({
           ...data,
           phone: data.phone || "",
+          district: data.district || "",
+          city: data.city || "",
           discountPrice: data.discountPrice ?? data.discountedPrice ?? 0,
           imageUrls: data.imageUrls || [],
         });
@@ -158,7 +162,8 @@ export default function UpdateListing() {
     if (
       e.target.type === "number" ||
       e.target.type === "text" ||
-      e.target.type === "textarea"
+      e.target.type === "textarea" ||
+      e.target.type === "select-one"
     ) {
       setFormData({
         ...formData,
