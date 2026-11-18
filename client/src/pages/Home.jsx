@@ -103,20 +103,20 @@ function Hero({ slides }) {
 
         <form
           onSubmit={handleSearch}
-          className="animate-rise mt-10 grid max-w-4xl grid-cols-1 gap-px bg-neutral-700 sm:grid-cols-2 lg:grid-cols-[1fr_auto_auto_auto]"
+          className="animate-rise mt-10 grid max-w-4xl grid-cols-2 gap-px bg-neutral-700 lg:grid-cols-[1fr_auto_auto_auto]"
           style={{ animationDelay: "400ms" }}
         >
           <input
             type="text"
             placeholder="Search by property name"
             aria-label="Search by property name"
-            className="h-14 border-0 bg-white px-5 text-base text-ink lg:text-sm placeholder:text-neutral-400 focus:outline-none"
+            className="col-span-2 h-14 min-w-0 border-0 bg-white px-5 text-base text-ink lg:col-span-1 lg:text-sm placeholder:text-neutral-400 focus:outline-none"
             value={search.searchTerm}
             onChange={(e) => setSearch({ ...search, searchTerm: e.target.value })}
           />
           <select
             aria-label="Listing type"
-            className="h-14 border-0 bg-white px-5 text-base text-ink lg:text-sm focus:outline-none"
+            className="h-14 min-w-0 border-0 bg-white pl-5 pr-11 text-base text-ink lg:text-sm focus:outline-none"
             value={search.type}
             onChange={(e) => setSearch({ ...search, type: e.target.value })}
           >
@@ -126,7 +126,7 @@ function Hero({ slides }) {
           </select>
           <select
             aria-label="District"
-            className="h-14 border-0 bg-white px-5 text-base text-ink lg:text-sm focus:outline-none"
+            className="h-14 min-w-0 border-0 bg-white pl-5 pr-11 text-base text-ink lg:text-sm focus:outline-none"
             value={search.district}
             onChange={(e) => setSearch({ ...search, district: e.target.value })}
           >
@@ -137,7 +137,7 @@ function Hero({ slides }) {
               </option>
             ))}
           </select>
-          <button className="btn h-14 bg-white text-ink hover:bg-neutral-200 lg:border-l lg:border-neutral-200">
+          <button className="btn col-span-2 h-14 bg-white text-ink hover:bg-neutral-200 lg:col-span-1">
             Search
           </button>
         </form>

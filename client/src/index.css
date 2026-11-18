@@ -14,6 +14,23 @@
   :focus-visible {
     @apply outline outline-2 outline-offset-2 outline-ink;
   }
+
+  /* iPhones round the corners of fields and draw their own dropdown arrows; keep every field square */
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea {
+    border-radius: 0;
+  }
+
+  /* one dropdown style everywhere: no system arrows, a thin black chevron instead */
+  select {
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%230a0a0a' stroke-width='1.5'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 14px;
+  }
 }
 
 /* shared building blocks so every page uses the same buttons, fields and labels */
@@ -51,7 +68,18 @@
   }
 
   .input {
-    @apply h-12 w-full border border-neutral-300 bg-white px-4 text-base text-ink lg:text-sm placeholder:text-neutral-400 transition-colors focus:border-ink focus:outline-none read-only:bg-neutral-50 read-only:text-neutral-500;
+    @apply h-12 w-full border border-neutral-300 bg-white px-4 text-base text-ink lg:text-sm placeholder:text-neutral-400 transition-colors focus:border-ink focus:outline-none;
+  }
+
+  /* locked text fields (e.g. the owner email) look greyed out; dropdowns and buttons count as
+     "read-only" to browsers too, so this is limited to real text inputs */
+  input.input:read-only {
+    @apply bg-neutral-50 text-neutral-500;
+  }
+
+  /* leave room for the dropdown arrow */
+  select.input {
+    padding-right: 2.75rem;
   }
 
   .textarea {
