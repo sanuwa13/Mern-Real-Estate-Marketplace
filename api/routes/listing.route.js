@@ -1,7 +1,7 @@
 import express from 'express';
 import { createListing } from '../controllers/listing.controller.js';
 import { verifyAdmin } from '../utils/verifyUser.js';
-import { deleteListing, updateListing, getListing, getListings, getListingStats } from '../controllers/listing.controller.js';
+import { deleteListing, updateListing, getListing, getListings, getListingStats, getListingLocations } from '../controllers/listing.controller.js';
 
 const router = express.Router();
 
@@ -12,5 +12,6 @@ router.post('/update/:id', verifyAdmin, updateListing);
 router.get('/get/:id', getListing);
 router.get('/get', getListings);
 router.get('/stats', getListingStats);
+router.get('/locations', getListingLocations);
 
 export default router;

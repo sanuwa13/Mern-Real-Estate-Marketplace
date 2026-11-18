@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { DISTRICTS } from '../utils/districts.js';
 
 const listingSchema = new mongoose.Schema(
   {
@@ -13,6 +14,17 @@ const listingSchema = new mongoose.Schema(
     address: {
       type: String,
       required: true,
+    },
+    // not required in the schema so ads created before locations existed stay valid;
+    // new ads must have both (checked in the controller)
+    district: {
+      type: String,
+      enum: DISTRICTS,
+    },
+    city: {
+      type: String,
+      trim: true,
+      maxlength: 60,
     },
     phone: {
       type: String,
