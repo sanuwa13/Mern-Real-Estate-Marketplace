@@ -120,7 +120,7 @@ export default function Listing() {
             {/* hairline grid: the 1px gaps show the background colour as dividers */}
             <dl className="mt-10 grid grid-cols-2 gap-px border-y border-neutral-200 bg-neutral-200 sm:grid-cols-4">
               {facts.map((fact) => (
-                <div key={fact.label} className="bg-white py-6 pr-4 sm:px-6 sm:first:pl-0">
+                <div key={fact.label} className="bg-white py-6 pr-4 even:pl-6 sm:px-6 sm:first:pl-0">
                   <dt className="eyebrow">{fact.label}</dt>
                   <dd className="mt-2 font-display text-2xl font-semibold">{fact.value}</dd>
                 </div>

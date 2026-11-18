@@ -234,7 +234,7 @@ function Stats({ stats }) {
         </Reveal>
         <div className="grid grid-cols-2 gap-px bg-neutral-800 sm:grid-cols-4">
           {figures.map((figure, index) => (
-            <Reveal key={figure.label} delay={index * 120} className="bg-ink py-6 pr-4 sm:px-6">
+            <Reveal key={figure.label} delay={index * 120} className="bg-ink py-6 pr-4 even:pl-6 sm:px-6">
               <p className="font-display text-5xl font-semibold tracking-tight sm:text-6xl">
                 {figure.value === undefined ? "–" : <CountUp value={figure.value} />}
               </p>
